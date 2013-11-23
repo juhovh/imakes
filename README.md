@@ -5,10 +5,14 @@ Kickass image and photo blog that can be used for recording all those memorable
 (drunken) moments with your best friends and buddies. All you need is an IMAP
 mailbox and its email address and you are ready to start.
 
-Install dependencies
---------------------
+Installation
+------------
 
-### Mac OS X
+### Install dependencies
+
+The server is tested to run correctly on Mac OS X 10.8 and Ubuntu 12.04 LTS.
+
+#### Mac OS X
 
 ```
 brew install node
@@ -19,7 +23,7 @@ brew install qtfaststart
 brew install sqlite3
 ```
 
-### Ubuntu 12.04
+#### Ubuntu 12.04
 
 ```
 # Install Node.js
@@ -43,8 +47,7 @@ sudo apt-get install libav-tools libavcodec-extra-53
 sudo apt-get install sqlite3
 ```
 
-Configure the server
---------------------
+### Configure the server
 
 ```
 cd imakes/
@@ -54,16 +57,14 @@ vim config.js # Edit all the marked fields
 vim db/users.sql # Modify the user login information
 ```
 
-Initializing the database
--------------------------
+### Initializing the database
 
 ```
 cat db/schema.sql | sqlite3 imakes.db
 cat db/users.sql | sqlite3 imakes.db
 ```
 
-Finally run the server
-----------------------
+### Finally run the server
 
 ```
 node server
