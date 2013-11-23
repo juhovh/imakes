@@ -1,0 +1,7 @@
+config.js
+imakes.db
+files/
+
+node_modules/
+.DS_Store
+*.swp

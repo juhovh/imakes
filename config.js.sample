@@ -1,0 +1,29 @@
+module.exports = {
+  // Remove from production
+  noAuthentication: true,
+
+  secret: '2sFsdflj23Sf43gskljs43',
+  sessionDuration: 2 * 7 * 24 * 60 * 60 * 1000,
+  staticPath: __dirname + '/public',
+  viewsPath: __dirname + '/views',
+  loginFailedPage: '/login',
+  loginSuccessPage: '/',
+
+  imap: {
+    user: <USERNAME>,
+    password: <PASSWORD>,
+    host: <SERVER>,
+    port: 993,
+    tls: true,
+    tlsOptions: { rejectUnauthorized: false }
+  },
+  google: {
+    returnURL: 'http://<HOSTNAME>/auth/google/return',
+    realm: 'http://<HOSTNAME>/'
+  },
+  github: {
+    clientID: '<CLIENTID>',
+    clientSecret: '<SECRET>',
+    callbackURL: 'http://<HOSTNAME>/auth/github/callback'
+  }
+};

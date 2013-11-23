@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{# {% include 'subnavbar.html' %} #}
+{% include 'pagination.html' %}
+{% for message in messages %}
+  <div class="message">
+    <h3><a href="/message/{{ message.id }}">{{ message.title }}</a></h3>
+    <h5>{{ message.date }} at {{ message.time }} by {{ message.author }}</h5>
+    <h6>
+      Liked by {{ message.favorited.length }} people
+      <button type="button" class="btn btn-primary btn-sm btn-favorite{% if message.favorite %} active{% endif %}" data-url="/api/user/{{ user.id }}/favorite/{{ message.id }}">{% if message.favorite %}Unlike{% else %}Like{% endif %}</button>
+    </h6>
+    {% for image in message.images %}
+    <div class="image">
+      <a href="/image/{{ image.id }}/large"><img class="img-responsive" src="/image/{{ image.id }}/medium"></a>
+    </div>
+    {% endfor %}
+    {% for video in message.videos %}
+    <div class="video">
+      <div class="flowplayer" data-swf="//releases.flowplayer.org/5.4.4/flowplayer.swf">
+        <video preload="none" poster="/video/{{ video.id }}/screenshot">
+          <source type="video/mp4" src="/video/{{ video.id }}/mp4">
+        </video>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if not loop.last %}<hr>{% endif %}
+{% endfor %}
+{% include 'pagination.html' %}
+
+{% endblock %}

@@ -1,0 +1,28 @@
+footer {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: #eee;
+}
+
+.message img {
+  border: 1px solid #444;
+  display: inline-block;
+}
+
+.message {
+  padding-bottom: 10px;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.message .video {
+  background-color: black;
+}
+
+.pagination {
+  width: 100%;
+}
+
+.pagination .glyphicon {
+  margin: 0 -2px;
+}

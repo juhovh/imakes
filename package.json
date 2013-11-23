@@ -1,0 +1,42 @@
+{
+  "name": "imakes",
+  "version": "0.1.0",
+  "description": "Imakes image file server",
+  "maintainers": [
+    {
+      "name": "Juho Vähä-Herttua",
+      "email": "juhovh@iki.fi",
+      "web": "http://juho.vaha-herttua.fi/"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "AGPLv3",
+      "url": "http://www.gnu.org/licenses/agpl.html"
+    }
+  ],
+  "engines": {
+    "node": "0.10.21"
+  },
+  "dependencies": {
+    "winston": "0.7.2",
+    "underscore": "1.5.2",
+    "async": "0.2.9",
+    "imap": "0.8.7",
+    "mmmagic": "0.3.4",
+    "mime": "1.2.11",
+    "sqlite3": "2.1.18",
+    "sprintf-js": "0.0.7",
+    "mkdirp": "0.3.5",
+    "gm": "1.13.2",
+    "avconv": "0.2.6",
+    "express": "3.4.3",
+    "passport": "0.1.17",
+    "passport-google": "0.3.0",
+    "passport-github": "0.1.5",
+    "consolidate": "0.9.1",
+    "swig": "1.1.0",
+    "moment": "2.4.0",
+    "xmlbuilder": "0.4.2"
+  }
+}
