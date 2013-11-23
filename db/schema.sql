@@ -27,7 +27,7 @@ CREATE TABLE "message" (
   "title"       TEXT,
   "author"      TEXT,
   "timestamp"   DATETIME NOT NULL,
-  "search"      TEXT,
+  "search"      TEXT UNIQUE ON CONFLICT IGNORE,
   "processed"   INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE "image" (
