@@ -244,7 +244,7 @@ exports.getImagePath = function(id, size, callback) {
   }
   var query = 'SELECT image.* '
             + 'FROM message, image '
-            + 'WHERE message.deleted=0 AND image.deleted=0 AND message.processed=1 AND image.id=?';
+            + 'WHERE message.deleted=0 AND image.deleted=0 AND message.processed=1 AND message.id=image.message_id AND image.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
@@ -268,7 +268,7 @@ exports.getVideoPath = function(id, format, callback) {
   }
   var query = 'SELECT video.* '
             + 'FROM message, video '
-            + 'WHERE message.deleted=0 AND video.deleted=0 AND message.processed=1 AND video.id=?';
+            + 'WHERE message.deleted=0 AND video.deleted=0 AND message.processed=1 AND message.id=video.message_id AND video.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
