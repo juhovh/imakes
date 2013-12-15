@@ -9,7 +9,7 @@ console.log('Checking checksums of all files');
 db.listMessages(function(err, result) {
   async.eachLimit(result.messages, 10, function(message, msgcb) {
     async.each(message.images, function(image, imgcb) {
-      console.log('Checking image file '+image.filename);
+      //console.log('Checking image file '+image.filename);
       filedb.getOriginalImagePath(image.filename, function(err, path) {
         if (err) return imgcb(err);
         fs.readFile(path, function(err, data) {
@@ -27,7 +27,7 @@ db.listMessages(function(err, result) {
     }, function(err) {
       if (err) return msgcb(err);
       async.each(message.videos, function(video, videocb) {
-        console.log('Checking video file '+video.filename);
+        //console.log('Checking video file '+video.filename);
         filedb.getOriginalVideoPath(video.filename, function(err, path) {
           if (err) return videocb(err);
           fs.readFile(path, function(err, data) {
