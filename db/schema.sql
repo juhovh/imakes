@@ -22,12 +22,12 @@ CREATE UNIQUE INDEX "auth_idx" ON "auth"("provider","identifier");
 CREATE TABLE "message" (
   "id"          INTEGER PRIMARY KEY,
   "deleted"     INTEGER NOT NULL DEFAULT 0,
-  "imap_uid"    INTEGER UNIQUE ON CONFLICT IGNORE,
+  "imap_uid"    INTEGER UNIQUE,
   "servertime"  DATETIME,
   "title"       TEXT,
   "author"      TEXT,
   "timestamp"   DATETIME NOT NULL,
-  "search"      TEXT UNIQUE ON CONFLICT IGNORE,
+  "search"      TEXT UNIQUE,
   "processed"   INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE "image" (

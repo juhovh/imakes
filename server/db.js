@@ -106,7 +106,11 @@ exports.addMessage = function(message, callback) {
     var params = [message.imap_uid, message.servertime, message.author, message.title, message.timestamp, getSearchString(message)];
 
     db.run('BEGIN TRANSACTION'); 
-    db.run(query, params);
+    db.run(query, params, function(err) {
+      // This is a duplicate message
+      // Prevent filedb methods from being run
+      db.run('COMMIT', callback);
+    });
     db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
       var messageid = row.rowid;
       var images = message.files.filter(function(file) { return /^image/.test(file.mimetype); });
