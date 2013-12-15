@@ -109,7 +109,7 @@ exports.addMessage = function(message, callback) {
     db.run(query, params, function(err) {
       // This is a duplicate message
       // Prevent filedb methods from being run
-      db.run('COMMIT', callback);
+      return db.run('COMMIT', callback);
     });
     db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
       var messageid = row.rowid;
