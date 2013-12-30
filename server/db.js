@@ -128,7 +128,7 @@ exports.addMessage = function(message, callback) {
             hash.update(file.data);
             var digest = hash.digest('hex');
 
-            var query = 'INSERT INTO image (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
+            var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES (image,?,?,?,?)';
             var params = [messageid, file.mimetype, filename, digest];
             db.run(query, params, cb);
           });
@@ -144,7 +144,7 @@ exports.addMessage = function(message, callback) {
               hash.update(file.data);
               var digest = hash.digest('hex');
 
-              var query = 'INSERT INTO video (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
+              var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES (video,?,?,?,?)';
               var params = [messageid, file.mimetype, filename, digest];
               db.run(query, params, cb);
             });
@@ -195,9 +195,10 @@ exports.listImages = function(options, callback) {
     options = {};
   }
   var params = [];
-  var query = dbutils.generateQuery('message.*', ['message','image'], options)
-  query.where.push('image.deleted=0');
-  query.where.push('message.id=image.message_id');
+  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
+  query.where.push('attachment.filetype=image');
+  query.where.push('attachment.deleted=0');
+  query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
     if (err) return callback(err);
     async.each(result.messages, function(message, callback) {
@@ -215,9 +216,10 @@ exports.listVideos = function(options, callback) {
     options = {};
   }
   var params = [];
-  var query = dbutils.generateQuery('message.*', ['message','video'], options)
-  query.where.push('video.deleted=0');
-  query.where.push('message.id=video.message_id');
+  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
+  query.where.push('attachment.filetype=video');
+  query.where.push('attachment.deleted=0');
+  query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
     if (err) return callback(err);
     async.each(result.messages, function(message, callback) {
@@ -230,7 +232,7 @@ exports.listVideos = function(options, callback) {
 };
 
 exports.updateImage = function(image, callback) {
-  var query = 'UPDATE image SET mimetype=?,width=?,height=?,exif=? WHERE id=?';
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype=image AND id=?';
   var params = [image.mimetype, image.width, image.height, image.exif, image.id];
   db.run(query, params, function(err) {
     callback(err, image);
@@ -254,7 +256,7 @@ exports.getImagePath = function(id, size, callback) {
 };
 
 exports.updateVideo = function(video, callback) {
-  var query = 'UPDATE video SET mimetype=?,width=?,height=?,exif=? WHERE id=?';
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype=video AND id=?';
   var params = [video.mimetype, video.width, video.height, video.exif, video.id];
   db.run(query, params, function(err) {
     callback(err, video);

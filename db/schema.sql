@@ -30,23 +30,12 @@ CREATE TABLE "message" (
   "search"      TEXT UNIQUE,
   "processed"   INTEGER NOT NULL DEFAULT 0
 );
-CREATE TABLE "image" (
+CREATE TABLE "attachment" (
   "id"          INTEGER PRIMARY KEY,
   "deleted"     INTEGER NOT NULL DEFAULT 0,
   "message_id"  INTEGER NOT NULL,
-  "filename"    TEXT NOT NULL UNIQUE ON CONFLICT IGNORE,
-  "mimetype"    TEXT NOT NULL,
-  "checksum"    TEXT NOT NULL,
-  "width"       INTEGER,
-  "height"      INTEGER,
-  "exif"        TEXT,
-  FOREIGN KEY("message_id") REFERENCES "message"("id")
-);
-CREATE TABLE "video" (
-  "id"          INTEGER PRIMARY KEY,
-  "deleted"     INTEGER NOT NULL DEFAULT 0,
-  "message_id"  INTEGER NOT NULL,
-  "filename"    TEXT NOT NULL UNIQUE ON CONFLICT IGNORE,
+  "filetype"    TEXT NOT NULL,
+  "filename"    TEXT NOT NULL,
   "mimetype"    TEXT NOT NULL,
   "checksum"    TEXT NOT NULL,
   "width"       INTEGER,
