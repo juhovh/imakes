@@ -110,47 +110,47 @@ exports.addMessage = function(message, callback) {
       // This is a duplicate message
       // Prevent filedb methods from being run
       return db.run('COMMIT', callback);
-    });
-    db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
-      var messageid = row.rowid;
-      var images = message.files.filter(function(file) { return /^image/.test(file.mimetype); });
-      var videos = message.files.filter(function(file) { return /^video/.test(file.mimetype); });
+      db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
+        var messageid = row.rowid;
+        var images = message.files.filter(function(file) { return /^image/.test(file.mimetype); });
+        var videos = message.files.filter(function(file) { return /^video/.test(file.mimetype); });
 
-      images.forEach(function(image, idx) { image.idx = idx+1; });
-      videos.forEach(function(video, idx) { video.idx = idx+1; });
+        images.forEach(function(image, idx) { image.idx = idx+1; });
+        videos.forEach(function(video, idx) { video.idx = idx+1; });
 
-      async.eachSeries(images, function(file, cb) {
-        var extension = mime.extension(file.mimetype);
-        var filename = sprintf('%05d_%02d.%s', messageid, file.idx, extension);
-        filedb.addImage(filename, file.data, function(err) {
-          if (err) return cb(err);
-
-          var hash = crypto.createHash('sha256');
-          hash.update(file.data);
-          var digest = hash.digest('hex');
-
-          var query = 'INSERT INTO image (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
-          var params = [messageid, file.mimetype, filename, digest];
-          db.run(query, params, cb);
-        });
-      }, function(err) {
-        if (err) return callback(err);
-        async.eachSeries(videos, function(file, cb) {
+        async.eachSeries(images, function(file, cb) {
           var extension = mime.extension(file.mimetype);
           var filename = sprintf('%05d_%02d.%s', messageid, file.idx, extension);
-          filedb.addVideo(filename, file.data, function(err) {
+          filedb.addImage(filename, file.data, function(err) {
             if (err) return cb(err);
 
             var hash = crypto.createHash('sha256');
             hash.update(file.data);
             var digest = hash.digest('hex');
 
-            var query = 'INSERT INTO video (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
+            var query = 'INSERT INTO image (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
             var params = [messageid, file.mimetype, filename, digest];
             db.run(query, params, cb);
           });
         }, function(err) {
-          db.run('COMMIT', callback);
+          if (err) return callback(err);
+          async.eachSeries(videos, function(file, cb) {
+            var extension = mime.extension(file.mimetype);
+            var filename = sprintf('%05d_%02d.%s', messageid, file.idx, extension);
+            filedb.addVideo(filename, file.data, function(err) {
+              if (err) return cb(err);
+
+              var hash = crypto.createHash('sha256');
+              hash.update(file.data);
+              var digest = hash.digest('hex');
+
+              var query = 'INSERT INTO video (message_id,mimetype,filename,checksum) VALUES (?,?,?,?)';
+              var params = [messageid, file.mimetype, filename, digest];
+              db.run(query, params, cb);
+            });
+          }, function(err) {
+            db.run('COMMIT', callback);
+          });
         });
       });
     });
