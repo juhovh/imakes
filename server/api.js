@@ -73,7 +73,7 @@ exports.setup = function(config, app) {
       searchFavoritesByUser: '/api/search/favorites/1',
       searchMessages: '/api/search/messages?from=1325376000000&until=1356998400000',
       searchImages: '/api/search/images?key=aki&order_by=id_desc&offset=0&limit=20',
-      searchVideos: '/api/search/messages'
+      searchVideos: '/api/search/videos'
     });
   });
 
