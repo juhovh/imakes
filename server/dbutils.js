@@ -145,7 +145,7 @@ exports.listMessageQuery = function(query, params, callback) {
 exports.populateMessage = function(message, callback) {
   async.parallel([
     function(callback) {
-      var query = 'SELECT * FROM attachment WHERE filetype = image AND message_id = ?';
+      var query = 'SELECT * FROM attachment WHERE filetype = "image" AND message_id = ?';
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
@@ -157,7 +157,7 @@ exports.populateMessage = function(message, callback) {
       });
     },
     function(callback) {
-      var query = 'SELECT * FROM attachment WHERE filetype = video AND message_id = ?';
+      var query = 'SELECT * FROM attachment WHERE filetype = "video" AND message_id = ?';
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);

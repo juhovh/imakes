@@ -196,7 +196,7 @@ exports.listImages = function(options, callback) {
   }
   var params = [];
   var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
-  query.where.push('attachment.filetype=image');
+  query.where.push('attachment.filetype="image"');
   query.where.push('attachment.deleted=0');
   query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
@@ -217,7 +217,7 @@ exports.listVideos = function(options, callback) {
   }
   var params = [];
   var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
-  query.where.push('attachment.filetype=video');
+  query.where.push('attachment.filetype="video"');
   query.where.push('attachment.deleted=0');
   query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
@@ -232,7 +232,7 @@ exports.listVideos = function(options, callback) {
 };
 
 exports.updateImage = function(image, callback) {
-  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype=image AND id=?';
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype="image" AND id=?';
   var params = [image.mimetype, image.width, image.height, image.exif, image.id];
   db.run(query, params, function(err) {
     callback(err, image);
@@ -246,7 +246,7 @@ exports.getImagePath = function(id, size, callback) {
   }
   var query = 'SELECT attachment.* '
             + 'FROM message, attachment '
-            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype=image AND attachment.id=?';
+            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype="image" AND attachment.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
@@ -256,7 +256,7 @@ exports.getImagePath = function(id, size, callback) {
 };
 
 exports.updateVideo = function(video, callback) {
-  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype=video AND id=?';
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype="video" AND id=?';
   var params = [video.mimetype, video.width, video.height, video.exif, video.id];
   db.run(query, params, function(err) {
     callback(err, video);
@@ -270,7 +270,7 @@ exports.getVideoPath = function(id, format, callback) {
   }
   var query = 'SELECT attachment.* '
             + 'FROM message, attachment '
-            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype=video AND attachment.id=?';
+            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype="video" AND attachment.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
