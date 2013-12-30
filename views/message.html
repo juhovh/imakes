@@ -11,7 +11,7 @@
   </h6>
   {% for image in message.images %}
   <div class="image">
-    <a href="/attachment/{{ image.id }}/large"><img class="img-responsive" src="/image/{{ image.id }}/medium"></a>
+    <a href="/attachment/{{ image.id }}/large"><img class="img-responsive" src="/attachment/{{ image.id }}/medium"></a>
   </div>
   {% endfor %}
   {% for video in message.videos %}
