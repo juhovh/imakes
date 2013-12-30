@@ -244,9 +244,9 @@ exports.getImagePath = function(id, size, callback) {
     callback = size;
     size = 'large';
   }
-  var query = 'SELECT image.* '
-            + 'FROM message, image '
-            + 'WHERE message.deleted=0 AND image.deleted=0 AND message.processed=1 AND message.id=image.message_id AND image.id=?';
+  var query = 'SELECT attachment.* '
+            + 'FROM message, attachment '
+            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype=image AND attachment.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
@@ -268,9 +268,9 @@ exports.getVideoPath = function(id, format, callback) {
     callback = format;
     format = 'mp4';
   }
-  var query = 'SELECT video.* '
-            + 'FROM message, video '
-            + 'WHERE message.deleted=0 AND video.deleted=0 AND message.processed=1 AND message.id=video.message_id AND video.id=?';
+  var query = 'SELECT attachment.* '
+            + 'FROM message, attachment '
+            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype=video AND attachment.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
