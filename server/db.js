@@ -128,7 +128,7 @@ exports.addMessage = function(message, callback) {
             hash.update(file.data);
             var digest = hash.digest('hex');
 
-            var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES (image,?,?,?,?)';
+            var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES ("image",?,?,?,?)';
             var params = [messageid, file.mimetype, filename, digest];
             db.run(query, params, cb);
           });
@@ -144,7 +144,7 @@ exports.addMessage = function(message, callback) {
               hash.update(file.data);
               var digest = hash.digest('hex');
 
-              var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES (video,?,?,?,?)';
+              var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES ("video",?,?,?,?)';
               var params = [messageid, file.mimetype, filename, digest];
               db.run(query, params, cb);
             });
