@@ -232,34 +232,18 @@ exports.setup = function(config, app) {
 
 
 
-  app.get('/image/:id', authenticate, function(req, res, next) {
-    db.getImagePath(req.params.id, function(err, path) {
+  app.get('/attachment/:id', authenticate, function(req, res, next) {
+    db.getAttachmentPath(req.params.id, function(err, path) {
       if (err) return next(err);
-      if (!path) return res.send(404, 'Image not found');
+      if (!path) return res.send(404, 'Attachment not found');
       res.sendfile(path);
     });
   });
 
-  app.get('/image/:id/:size', authenticate, function(req, res, next) {
-    db.getImagePath(req.params.id, req.params.size, function(err, path) {
+  app.get('/attachment/:id/:type', authenticate, function(req, res, next) {
+    db.getAttachmentPath(req.params.id, req.params.type, function(err, path) {
       if (err) return next(err);
-      if (!path) return res.send(404, 'Image not found');
-      res.sendfile(path);
-    });
-  });
-
-  app.get('/video/:id', authenticate, function(req, res, next) {
-    db.getVideoPath(req.params.id, function(err, path) {
-      if (err) return next(err);
-      if (!path) return res.send(404, 'Video not found');
-      res.sendfile(path);
-    });
-  });
-
-  app.get('/video/:id/:format', authenticate, function(req, res, next) {
-    db.getVideoPath(req.params.id, req.params.format, function(err, path) {
-      if (err) return next(err);
-      if (!path) return res.send(404, 'Video not found');
+      if (!path) return res.send(404, 'Attachment not found');
       res.sendfile(path);
     });
   });

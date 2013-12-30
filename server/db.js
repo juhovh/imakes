@@ -112,45 +112,28 @@ exports.addMessage = function(message, callback) {
       return db.run('COMMIT', callback);
       db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
         var messageid = row.rowid;
-        var images = message.files.filter(function(file) { return /^image/.test(file.mimetype); });
-        var videos = message.files.filter(function(file) { return /^video/.test(file.mimetype); });
+        var files = message.files.filter(function(file) { return /^(image|video)/.test(file.mimetype); });
+        files.forEach(function(file, idx) { file.idx = idx; });
 
-        images.forEach(function(image, idx) { image.idx = idx+1; });
-        videos.forEach(function(video, idx) { video.idx = idx+1; });
-
-        async.eachSeries(images, function(file, cb) {
+        async.eachSeries(files, function(file, cb) {
           var extension = mime.extension(file.mimetype);
+          var filetype = /^image/.test(file.mimetype) ? "image" : "video";
           var filename = sprintf('%05d_%02d.%s', messageid, file.idx, extension);
-          filedb.addImage(filename, file.data, function(err) {
+
+          var addFile = (filetype === "image") ? filedb.addImage : filedb.addVideo;
+          addFile(filename, file.data, function(err) {
             if (err) return cb(err);
 
             var hash = crypto.createHash('sha256');
             hash.update(file.data);
             var digest = hash.digest('hex');
 
-            var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES ("image",?,?,?,?)';
-            var params = [messageid, file.mimetype, filename, digest];
+            var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES (?,?,?,?,?)';
+            var params = [filetype, messageid, file.mimetype, filename, digest];
             db.run(query, params, cb);
           });
         }, function(err) {
-          if (err) return callback(err);
-          async.eachSeries(videos, function(file, cb) {
-            var extension = mime.extension(file.mimetype);
-            var filename = sprintf('%05d_%02d.%s', messageid, file.idx, extension);
-            filedb.addVideo(filename, file.data, function(err) {
-              if (err) return cb(err);
-
-              var hash = crypto.createHash('sha256');
-              hash.update(file.data);
-              var digest = hash.digest('hex');
-
-              var query = 'INSERT INTO attachment (filetype,message_id,mimetype,filename,checksum) VALUES ("video",?,?,?,?)';
-              var params = [messageid, file.mimetype, filename, digest];
-              db.run(query, params, cb);
-            });
-          }, function(err) {
-            db.run('COMMIT', callback);
-          });
+          db.run('COMMIT', callback);
         });
       });
     });
@@ -231,51 +214,35 @@ exports.listVideos = function(options, callback) {
   });
 };
 
-exports.updateImage = function(image, callback) {
-  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype="image" AND id=?';
-  var params = [image.mimetype, image.width, image.height, image.exif, image.id];
+exports.updateAttachment = function(attachment, callback) {
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE id=?';
+  var params = [attachment.mimetype, attachment.width, attachment.height, attachment.exif, attachment.id];
   db.run(query, params, function(err) {
-    callback(err, image);
+    callback(err, attachment);
   });
 };
 
-exports.getImagePath = function(id, size, callback) {
+exports.getAttachmentPath = function(id, type, callback) {
   if (!callback) {
-    callback = size;
-    size = 'large';
+    callback = type;
+    type = null;
   }
   var query = 'SELECT attachment.* '
             + 'FROM message, attachment '
-            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype="image" AND attachment.id=?';
+            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.id=?';
   var params = [id];
   db.get(query, params, function(err, row) {
     if (err) return callback(err);
     if (!row) return callback();
-    filedb.getImagePath(row.filename, size, callback);
-  });
-};
-
-exports.updateVideo = function(video, callback) {
-  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE filetype="video" AND id=?';
-  var params = [video.mimetype, video.width, video.height, video.exif, video.id];
-  db.run(query, params, function(err) {
-    callback(err, video);
-  });
-};
-
-exports.getVideoPath = function(id, format, callback) {
-  if (!callback) {
-    callback = format;
-    format = 'mp4';
-  }
-  var query = 'SELECT attachment.* '
-            + 'FROM message, attachment '
-            + 'WHERE message.deleted=0 AND attachment.deleted=0 AND message.processed=1 AND message.id=attachment.message_id AND attachment.filetype="video" AND attachment.id=?';
-  var params = [id];
-  db.get(query, params, function(err, row) {
-    if (err) return callback(err);
-    if (!row) return callback();
-    filedb.getVideoPath(row.filename, format, callback);
+    if (row.filetype === "image") {
+      type = type || 'large';
+      return filedb.getImagePath(row.filename, type, callback);
+    }
+    if (row.filetype === "video") {
+      type = type || 'mp4';
+      return filedb.getVideoPath(row.filename, type, callback);
+    }
+    return callback();
   });
 };
 

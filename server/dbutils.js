@@ -143,28 +143,19 @@ exports.listMessageQuery = function(query, params, callback) {
 };
 
 exports.populateMessage = function(message, callback) {
+  message.images = [];
+  message.videos = [];
   async.parallel([
     function(callback) {
-      var query = 'SELECT * FROM attachment WHERE filetype = "image" AND message_id = ?';
+      var query = 'SELECT * FROM attachment WHERE message_id = ?';
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
         rows.forEach(function(row) {
           if (row.exif) row.exif = JSON.parse(row.exif);
+          if (/^image$/.test(row.filetype)) message.images.push(row);
+          if (/^video$/.test(row.filetype)) message.videos.push(row);
         });
-        message.images = rows;
-        callback();
-      });
-    },
-    function(callback) {
-      var query = 'SELECT * FROM attachment WHERE filetype = "video" AND message_id = ?';
-      var params = [message.id];
-      db.all(query, params, function(err, rows) {
-        if (err) return callback(err);
-        rows.forEach(function(row) {
-          if (row.exif) row.exif = JSON.parse(row.exif);
-        });
-        message.videos = rows;
         callback();
       });
     },

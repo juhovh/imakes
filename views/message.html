@@ -11,14 +11,14 @@
   </h6>
   {% for image in message.images %}
   <div class="image">
-    <a href="/image/{{ image.id }}/large"><img class="img-responsive" src="/image/{{ image.id }}/medium"></a>
+    <a href="/attachment/{{ image.id }}/large"><img class="img-responsive" src="/image/{{ image.id }}/medium"></a>
   </div>
   {% endfor %}
   {% for video in message.videos %}
   <div class="video">
     <div class="flowplayer" data-swf="//releases.flowplayer.org/5.4.6/flowplayer.swf">
-      <video preload="none" poster="/video/{{ video.id }}/screenshot">
-        <source type="video/mp4" src="/video/{{ video.id }}/mp4">
+      <video preload="none" poster="/attachment/{{ video.id }}/screenshot">
+        <source type="video/mp4" src="/attachment/{{ video.id }}/mp4">
       </video>
     </div>
   </div>
