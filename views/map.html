@@ -14,5 +14,26 @@ var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z
 });
 MapQuestOpen_OSM.addTo(map);
 
+$.getJSON('/api/search/images?key=2013', function(data) {
+  data.messages.forEach(function(msg) {
+    msg.images.forEach(function(img) {
+      if (!img.exif || !img.exif.GPSPosition) return;
+
+      var regexp = new RegExp("^(\\d{1,2}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (N|S), (\\d{1,3}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (E|W)$");
+      var match = img.exif.GPSPosition.match(regexp);
+      if (!match) return;
+
+      var lat = parseInt(match[1]) + (1/60*parseInt(match[2])) + (1/3600*parseFloat(match[3]))
+      var lon = parseInt(match[6]) + (1/60*parseInt(match[7])) + (1/3600*parseFloat(match[8]))
+      if (match[5] === 'S') lat = -lat;
+      if (match[9] === 'W') lon = -lon;
+
+      var marker = L.marker([lat, lon]);
+      marker.bindPopup('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a>');
+      marker.addTo(map);
+    });
+  });
+});
+
 </script>
 {% endblock %}
