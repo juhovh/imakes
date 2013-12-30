@@ -14,7 +14,7 @@ function filterImage(image) {
 }
 
 function filterVideo(video) {
-  return _.pick(video, 'id', 'exif');
+  return _.pick(video, 'id', 'width', 'height', 'exif');
 }
 
 function filterMessage(message) {
