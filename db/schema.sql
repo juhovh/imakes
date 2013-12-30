@@ -49,6 +49,8 @@ CREATE TABLE "video" (
   "filename"    TEXT NOT NULL UNIQUE ON CONFLICT IGNORE,
   "mimetype"    TEXT NOT NULL,
   "checksum"    TEXT NOT NULL,
+  "width"       INTEGER,
+  "height"      INTEGER,
   "exif"        TEXT,
   FOREIGN KEY("message_id") REFERENCES "message"("id")
 );

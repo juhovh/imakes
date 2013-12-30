@@ -254,8 +254,8 @@ exports.getImagePath = function(id, size, callback) {
 };
 
 exports.updateVideo = function(video, callback) {
-  var query = 'UPDATE video SET mimetype=?,exif=? WHERE id=?';
-  var params = [video.mimetype, video.exif, video.id];
+  var query = 'UPDATE video SET mimetype=?,width=?,height=?,exif=? WHERE id=?';
+  var params = [video.mimetype, video.width, video.height, video.exif, video.id];
   db.run(query, params, function(err) {
     callback(err, video);
   });

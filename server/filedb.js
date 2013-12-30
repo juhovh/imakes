@@ -234,6 +234,15 @@ function processVideo(video, debug, videocb) {
         if (debug) stream.pipe(process.stdout);
         stream.once('end', function(exitCode, signal) {
           if (exitCode) encodecb('avconv exit code: ' + exitCode);
+
+          // Swap width and height based on EXIF orientation
+          if (rotation === 90 || rotation === 270) {
+            video.width = exifdata.ImageHeight;
+            video.height = exifdata.ImageWeight;
+          } else {
+            video.width = exifdata.ImageWidth;
+            video.height = exifdata.ImageHeight;
+          }
           video.exif = JSON.stringify(exifdata);
           db.updateVideo(video, encodecb);
         });
