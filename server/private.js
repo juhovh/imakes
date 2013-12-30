@@ -163,6 +163,14 @@ exports.setup = function(config, app) {
     });
   });
 
+  app.get('/map', authenticate, function(req, res, next) {
+    res.render('map', {
+      url: '/map',
+      user: req.user,
+      username: format.user(req.user)
+    });
+  });
+
   app.get('/message/:id', authenticate, function(req, res, next) {
     db.getMessage(req.params.id, function(err, message) {
       if (err) return next(err);
