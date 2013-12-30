@@ -149,6 +149,9 @@ exports.populateMessage = function(message, callback) {
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
+        rows.forEach(function(row) {
+          if (row.exif) row.exif = JSON.parse(row.exif);
+        });
         message.images = rows;
         callback();
       });
@@ -158,6 +161,9 @@ exports.populateMessage = function(message, callback) {
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
+        rows.forEach(function(row) {
+          if (row.exif) row.exif = JSON.parse(row.exif);
+        });
         message.videos = rows;
         callback();
       });
