@@ -109,7 +109,8 @@ exports.addMessage = function(message, callback) {
     db.run(query, params, function(err) {
       // This is a duplicate message
       // Prevent filedb methods from being run
-      return db.run('COMMIT', callback);
+      if (err) return db.run('COMMIT', callback);
+
       db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
         var messageid = row.rowid;
         var files = message.files.filter(function(file) { return /^(image|video)/.test(file.mimetype); });
