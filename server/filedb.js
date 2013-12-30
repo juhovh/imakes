@@ -238,7 +238,7 @@ function processVideo(video, debug, videocb) {
           // Swap width and height based on EXIF orientation
           if (rotation === 90 || rotation === 270) {
             video.width = exifdata.ImageHeight;
-            video.height = exifdata.ImageWeight;
+            video.height = exifdata.ImageWidth;
           } else {
             video.width = exifdata.ImageWidth;
             video.height = exifdata.ImageHeight;
