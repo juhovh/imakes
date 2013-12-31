@@ -27,7 +27,7 @@ function getColor(str) {
   return markerColors[stringHash(str)%markerColors.length];
 }
 
-$.getJSON('/api/search/images?exif_contains=GPSPosition&limit=100', function(data) {
+$.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
   var authors = [];
   data.messages.forEach(function(msg) {
     msg.images.forEach(function(img) {
@@ -50,8 +50,7 @@ $.getJSON('/api/search/images?exif_contains=GPSPosition&limit=100', function(dat
         markerColor: markerColors[authors.indexOf(msg.author)%markerColors.length]
       });
       var marker = L.marker([lat, lon], {icon: icon});
-      var content = $('<div>').html('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img src="/attachment/'+img.id+'/square"></a>');
-      marker.bindPopup(content[0]);
+      marker.bindPopup('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>');
       marker.addTo(map);
     });
   });
