@@ -14,10 +14,27 @@ var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z
 });
 MapQuestOpen_OSM.addTo(map);
 
+var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
+function stringHash(str) {
+    var hash = 0;
+    for (i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = char + (hash << 6) + (hash << 16) - hash;
+    }
+    return hash;
+}
+function getColor(str) {
+  return markerColors[stringHash(str)%markerColors.length];
+}
+
 $.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
+  var authors = [];
   data.messages.forEach(function(msg) {
     msg.images.forEach(function(img) {
       if (!img.exif || !img.exif.GPSPosition) return;
+      if (authors.indexOf(msg.author) < 0) {
+        authors.push(msg.author);
+      }
 
       var regexp = new RegExp("^(\\d{1,2}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (N|S), (\\d{1,3}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (E|W)$");
       var match = img.exif.GPSPosition.match(regexp);
@@ -28,7 +45,11 @@ $.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
       if (match[5] === 'S') lat = -lat;
       if (match[10] === 'W') lon = -lon;
 
-      var marker = L.marker([lat, lon]);
+      var icon = L.AwesomeMarkers.icon({
+        icon: 'camera',
+        markerColor: markerColors[authors.indexOf(msg.author)%markerColors.length]
+      });
+      var marker = L.marker([lat, lon], {icon: icon});
       var content = $('<div>').html('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img src="/attachment/'+img.id+'/square"></a>');
       marker.bindPopup(content[0]);
       marker.addTo(map);
