@@ -29,7 +29,8 @@ $.getJSON('/api/search/images?key=2013', function(data) {
       if (match[9] === 'W') lon = -lon;
 
       var marker = L.marker([lat, lon]);
-      marker.bindPopup('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a>');
+      var content = $('<div>').html('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br><img src="/attachment/'+img.id+'/square">');
+      marker.bindPopup(content[0]);
       marker.addTo(map);
     });
   });
