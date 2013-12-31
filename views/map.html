@@ -14,7 +14,7 @@ var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z
 });
 MapQuestOpen_OSM.addTo(map);
 
-$.getJSON('/api/search/images?key=2013', function(data) {
+$.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
   data.messages.forEach(function(msg) {
     msg.images.forEach(function(img) {
       if (!img.exif || !img.exif.GPSPosition) return;
