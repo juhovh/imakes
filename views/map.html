@@ -27,7 +27,7 @@ function getColor(str) {
   return markerColors[stringHash(str)%markerColors.length];
 }
 
-$.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
+$.getJSON('/api/search/images?exif_contains=GPSPosition&limit=100', function(data) {
   var authors = [];
   data.messages.forEach(function(msg) {
     msg.images.forEach(function(img) {
