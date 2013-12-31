@@ -26,7 +26,7 @@ $.getJSON('/api/search/images?key=2013', function(data) {
       var lat = parseInt(match[1]) + (1/60*parseInt(match[2])) + (1/3600*parseFloat(match[3]))
       var lon = parseInt(match[6]) + (1/60*parseInt(match[7])) + (1/3600*parseFloat(match[8]))
       if (match[5] === 'S') lat = -lat;
-      if (match[9] === 'W') lon = -lon;
+      if (match[10] === 'W') lon = -lon;
 
       var marker = L.marker([lat, lon]);
       var content = $('<div>').html('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img src="/attachment/'+img.id+'/square"></a>');
