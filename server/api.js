@@ -25,7 +25,7 @@ function filterMessage(message) {
 }
 
 function filterSearchQuery(query) {
-  return _.pick(query, 'from', 'until', 'limit', 'offset', 'key', 'order_by');
+  return _.pick(query, 'from', 'until', 'limit', 'offset', 'key', 'order_by', 'exif_contains');
 }
 
 function filterSearchResult(result, query) {
@@ -182,6 +182,7 @@ exports.setup = function(config, app) {
     if (req.query.limit) options.limit = req.query.limit;
     if (req.query.offset) options.offset = req.query.offset;
     if (req.query.key) options.search = req.query.key;
+    if (req.query.exif_contains) options.exif = req.query.exif_contains;
     if (req.query.order_by) {
       options.order_by = generateOrderBy(req.query.order_by);
     } else {

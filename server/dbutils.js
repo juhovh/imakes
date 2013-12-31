@@ -44,6 +44,17 @@ exports.generateQuery = function(select, from, join, options) {
       query.where.push("message.search LIKE '%"+word+"%' ESCAPE '\\'");
     });
   }
+  if (typeof(options.exif) === 'string') {
+    var keys = _.compact(options.exif.split(','));
+    keys.forEach(function(key) {
+      // Escape each key separately
+      key = key.replace(/"/g, "\\\"");
+      key = key.replace(/'/g, "''");
+      key = key.replace(/%/g, "\\%");
+      key = key.replace(/_/g, "\\_");
+      query.where.push("attachment.exif LIKE '%\""+key+"\":%' ESCAPE '\\'");
+    });
+  }
   if (options.favorite != null) {
     if (options.favorite) {
       query.from.push('favorite');

@@ -161,7 +161,9 @@ exports.listMessages = function(options, callback) {
     options = {};
   }
   var params = [];
-  var query = dbutils.generateQuery('message.*', 'message', options)
+  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
+  query.where.push('attachment.deleted=0');
+  query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
     if (err) return callback(err);
     async.each(result.messages, function(message, callback) {
