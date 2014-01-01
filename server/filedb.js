@@ -194,7 +194,7 @@ function processImage(image, imgcb) {
           image.width = value.size.width;
           image.height = value.size.height;
         }
-        image.exif = JSON.stringify(exifdata);
+        image.metadata = JSON.stringify(exifdata);
         db.updateAttachment(image, imgcb);
       });
     });
@@ -243,7 +243,7 @@ function processVideo(video, debug, videocb) {
             video.width = exifdata.ImageWidth;
             video.height = exifdata.ImageHeight;
           }
-          video.exif = JSON.stringify(exifdata);
+          video.metadata = JSON.stringify(exifdata);
           db.updateAttachment(video, encodecb);
         });
       });

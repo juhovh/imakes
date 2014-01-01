@@ -40,7 +40,7 @@ CREATE TABLE "attachment" (
   "checksum"    TEXT NOT NULL,
   "width"       INTEGER,
   "height"      INTEGER,
-  "exif"        TEXT,
+  "metadata"    TEXT,
   FOREIGN KEY("message_id") REFERENCES "message"("id")
 );
 CREATE TABLE "favorite" (

@@ -44,15 +44,15 @@ exports.generateQuery = function(select, from, join, options) {
       query.where.push("message.search LIKE '%"+word+"%' ESCAPE '\\'");
     });
   }
-  if (typeof(options.exif) === 'string') {
-    var keys = _.compact(options.exif.split(','));
+  if (typeof(options.metadata) === 'string') {
+    var keys = _.compact(options.metadata.split(','));
     keys.forEach(function(key) {
       // Escape each key separately
       key = key.replace(/"/g, "\\\"");
       key = key.replace(/'/g, "''");
       key = key.replace(/%/g, "\\%");
       key = key.replace(/_/g, "\\_");
-      query.where.push("attachment.exif LIKE '%\""+key+"\":%' ESCAPE '\\'");
+      query.where.push("attachment.metadata LIKE '%\""+key+"\":%' ESCAPE '\\'");
     });
   }
   if (options.favorite != null) {
@@ -163,7 +163,7 @@ exports.populateMessage = function(message, callback) {
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
         rows.forEach(function(row) {
-          if (row.exif) row.exif = JSON.parse(row.exif);
+          if (row.metadata) row.metadata = JSON.parse(row.metadata);
           if (/^image$/.test(row.filetype)) message.images.push(row);
           if (/^video$/.test(row.filetype)) message.videos.push(row);
         });

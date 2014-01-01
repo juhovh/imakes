@@ -218,8 +218,8 @@ exports.listVideos = function(options, callback) {
 };
 
 exports.updateAttachment = function(attachment, callback) {
-  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,exif=? WHERE id=?';
-  var params = [attachment.mimetype, attachment.width, attachment.height, attachment.exif, attachment.id];
+  var query = 'UPDATE attachment SET mimetype=?,width=?,height=?,metadata=? WHERE id=?';
+  var params = [attachment.mimetype, attachment.width, attachment.height, attachment.metadata, attachment.id];
   db.run(query, params, function(err) {
     callback(err, attachment);
   });
