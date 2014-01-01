@@ -136,7 +136,7 @@ exports.setup = function(config, app) {
       processed: true,
       favorite: true,
       order_by: [
-        'COUNT(favorite.user_id) DESC',
+        'COUNT(DISTINCT favorite.user_id) DESC',
         'message.id DESC'
       ]
     };

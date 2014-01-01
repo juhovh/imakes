@@ -160,7 +160,7 @@ exports.setup = function(config, app) {
       title: 'message.title',
       author: 'message.author',
       timestamp: 'message.timestamp',
-      favorited: 'COUNT(favorite.user_id)'
+      favorited: 'COUNT(DISTINCT favorite.user_id)'
     };
     var order_by = _.compact(_.map(str.split(','), function(orderitem) {
       orderitem = orderitem.toLowerCase();

@@ -111,10 +111,10 @@ function getQueryString(query, params) {
     querystr += joinStringArray(' WHERE ', query.where, ' AND ');
   }
   if (query.group_by) {
-    querystr += joinStringArray(' GROUP BY ', query.group_by, ',');
+    querystr += joinStringArray(' GROUP BY ', query.group_by, ', ');
   }
   if (query.order_by) {
-    querystr += joinStringArray(' ORDER BY ', query.order_by, ',');
+    querystr += joinStringArray(' ORDER BY ', query.order_by, ', ');
   }
   if (query.limit) {
     querystr += ' LIMIT ?';
