@@ -22,6 +22,12 @@ var markers = new L.MarkerClusterGroup({
 map.addLayer(markers);
 
 var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
+function convertDateTime(str) {
+  if (typeof(str) !== 'string') return null;
+  var match = str.match(/(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+  if (!match) return null;
+  return parseInt(match[3])+'.'+parseInt(match[2])+'.'+match[1]+' '+parseInt(match[4])+':'+match[5];
+}
 
 $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
   var authors = [];
@@ -46,7 +52,11 @@ $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
         markerColor: markerColors[authors.indexOf(msg.author)%markerColors.length]
       });
       var marker = L.marker([lat, lon], {icon: icon});
-      marker.bindPopup('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>');
+      var content = '<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br>'
+      var datetime = convertDateTime(img.metadata.DateTimeOriginal);
+      if (datetime) content += 'Taken: '+datetime+'<br>';
+      content += '<a href="/message/'+msg.id+'"><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>';
+      marker.bindPopup(content);
       markers.addLayer(marker);
     });
   });
