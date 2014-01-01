@@ -15,7 +15,10 @@ var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z
 });
 map.addLayer(MapQuestOpen_OSM);
 
-var markers = new L.MarkerClusterGroup();
+var markers = new L.MarkerClusterGroup({
+  maxClusterRadius: 50,
+  disableClusteringAtZoom: 15
+});
 map.addLayer(markers);
 
 var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
