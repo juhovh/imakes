@@ -8,24 +8,17 @@
 <script type="text/javascript">
 
 var map = L.map('map').setView([60.1708, 24.9375], 13);
+
 var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
 	attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
 	subdomains: '1234'
 });
-MapQuestOpen_OSM.addTo(map);
+map.addLayer(MapQuestOpen_OSM);
+
+var markers = new L.MarkerClusterGroup();
+map.addLayer(markers);
 
 var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
-function stringHash(str) {
-    var hash = 0;
-    for (i = 0; i < str.length; i++) {
-        char = str.charCodeAt(i);
-        hash = char + (hash << 6) + (hash << 16) - hash;
-    }
-    return hash;
-}
-function getColor(str) {
-  return markerColors[stringHash(str)%markerColors.length];
-}
 
 $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
   var authors = [];
@@ -51,7 +44,7 @@ $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
       });
       var marker = L.marker([lat, lon], {icon: icon});
       marker.bindPopup('<a href="/message/'+msg.id+'"><b>'+msg.title+'</b><br><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>');
-      marker.addTo(map);
+      markers.addLayer(marker);
     });
   });
 });
