@@ -27,17 +27,17 @@ function getColor(str) {
   return markerColors[stringHash(str)%markerColors.length];
 }
 
-$.getJSON('/api/search/images?exif_contains=GPSPosition', function(data) {
+$.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
   var authors = [];
   data.messages.forEach(function(msg) {
     msg.images.forEach(function(img) {
-      if (!img.exif || !img.exif.GPSPosition) return;
+      if (!img.metadata || !img.metadata.GPSPosition) return;
       if (authors.indexOf(msg.author) < 0) {
         authors.push(msg.author);
       }
 
       var regexp = new RegExp("^(\\d{1,2}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (N|S), (\\d{1,3}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (E|W)$");
-      var match = img.exif.GPSPosition.match(regexp);
+      var match = img.metadata.GPSPosition.match(regexp);
       if (!match) return;
 
       var lat = parseInt(match[1]) + (1/60*parseInt(match[2])) + (1/3600*parseFloat(match[3]))
