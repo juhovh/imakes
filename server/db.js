@@ -97,6 +97,16 @@ exports.deleteFavorite = function(userid, msgid, callback) {
   db.run(query, params, callback);
 };
 
+exports.getStatistics = function(callback) {
+  var year = "strftime('%Y', message.timestamp/1000, 'unixepoch') AS year";
+  var month = "strftime('%m', message.timestamp/1000, 'unixepoch') AS month";
+  var query = 'SELECT '+year+', '+month+', message.author AS author, COUNT(attachment.id) AS count '
+            + 'FROM message, attachment '
+            + 'WHERE message.id=attachment.message_id '
+            + 'GROUP BY author, year, month';
+  db.all(query, callback);
+};
+
 function getSearchString(message) {
   var search = new Date(message.timestamp).toISOString();
   if (message.author) search += ' '+message.author.toLowerCase();

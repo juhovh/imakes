@@ -171,6 +171,14 @@ exports.setup = function(config, app) {
     });
   });
 
+  app.get('/stats', authenticate, function(req, res, next) {
+    res.render('stats', {
+      url: '/stats',
+      user: req.user,
+      username: format.user(req.user)
+    });
+  });
+
   app.get('/message/:id', authenticate, function(req, res, next) {
     db.getMessage(req.params.id, function(err, message) {
       if (err) return next(err);

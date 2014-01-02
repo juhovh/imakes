@@ -62,6 +62,19 @@ exports.setup = function(config, app) {
     }
   }
 
+  app.get('/api/stats', authenticate, function(req, res, next) {
+    db.getStatistics(function(err, result) {
+      if (err) return next(err);
+      var total = result.reduce(function(memo, value, idx) {
+        if (!memo[value.year]) memo[value.year] = {};
+        if (!memo[value.year][value.month]) memo[value.year][value.month] = 0;
+        memo[value.year][value.month] += value.count;
+        return memo;
+      }, {});
+      res.send({ total: total });
+    });
+  })
+
   app.get('/api/user/', authenticate, function(req, res, next) {
     db.listUsers(function(err, result) {
       if (err) return next(err);
