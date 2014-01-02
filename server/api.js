@@ -162,8 +162,8 @@ exports.setup = function(config, app) {
       deleted: false,
       processed: true
     };
-    if (/\d+/.test(req.query.from)) options.from = new Date(parseInt(req.query.from));
-    if (/\d+/.test(req.query.until)) options.until = new Date(parseInt(req.query.until));
+    if (/^\d+$/.test(req.query.from)) options.from = new Date(parseInt(req.query.from));
+    if (/^\d+$/.test(req.query.until)) options.until = new Date(parseInt(req.query.until));
     if (req.query.limit) options.limit = req.query.limit;
     if (req.query.offset) options.offset = req.query.offset;
     if (req.query.key) options.search = req.query.key;
