@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<canvas id="stats" width="600" height="400"></canvas>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+var ctx = document.getElementById("stats").getContext("2d");
+$.getJSON('/api/stats', function(data) {
+  var colors = [
+    {
+      fillColor: "rgba(220,220,220,0.5)",
+      strokeColor: "rgba(220,220,220,1)",
+      pointColor: "rgba(220,220,220,1)",
+      pointStrokeColor: "#fff",
+    },
+    {
+      fillColor: "rgba(151,187,205,0.5)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+    }
+  ];
+  var years = _.keys(data.total).sort();
+  var datasets = _.map(years, function(year, idx) {
+    var yeardata = data.total[year];
+    var months = _.map(_.range(1, 13), function(month) {
+      if (month < 10) return '0'+month;
+      else return ''+month;
+    });
+    var values = _.map(months, function(month) {
+      if (!yeardata[month]) return 0;
+      else return yeardata[month];
+    });
+    return _.extend({data: values}, colors[idx%colors.length]);
+  });
+  var chartdata = {
+    labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    datasets: datasets
+  };
+  var chartoptions = {
+    scaleOverride: true,
+    scaleSteps: 12,
+    scaleStepWidth: 10,
+    scaleStartValue: 0,
+    scaleShowGridLines: false
+  };
+  var chart = new Chart(ctx).Line(chartdata, chartoptions);
+});
+
+</script>
+{% endblock %}
