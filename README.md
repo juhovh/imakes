@@ -130,7 +130,7 @@ The metadata_contains parameter can include several metadata fields that are to 
 example `metadata_contains=CreateDate,GPSPosition|GPSCoordinates` searches for messages that have at
 least one attachment whose metadata contains both CreateDate and either GPSPosition or
 GPSCoordinates fields. It is worth to note that since metadata is not indexed in the database, these
-query parameters are considerably slower than any other query parameters an should be used
+query parameters are considerably slower than any other query parameters and should be used
 sparingly.
 
 The order_by parameter can contain a list of order parameters in the format field_(asc|desc).
