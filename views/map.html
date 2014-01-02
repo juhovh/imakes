@@ -31,10 +31,10 @@ function convertDateTime(str) {
 
 $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
   var authors = [];
-  data.messages.forEach(function(msg) {
-    msg.images.forEach(function(img) {
+  _.each(data.messages, function(msg) {
+    _.each(msg.images, function(img) {
       if (!img.metadata || !img.metadata.GPSPosition) return;
-      if (authors.indexOf(msg.author) < 0) {
+      if (!_.contains(authors, msg.author)) {
         authors.push(msg.author);
       }
 
@@ -49,7 +49,7 @@ $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
 
       var icon = L.AwesomeMarkers.icon({
         icon: 'camera',
-        markerColor: markerColors[authors.indexOf(msg.author)%markerColors.length]
+        markerColor: markerColors[_.indexOf(authors, msg.author)%markerColors.length]
       });
       var marker = L.marker([lat, lon], {icon: icon});
       var content = '<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br>'
