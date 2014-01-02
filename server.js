@@ -13,28 +13,29 @@ var api = require('./server/api');
 
 function backgroundTask() {
   fetcher(function(err, hasmore) {
-    if (err) winston.error(err);
+    if (err) winston.error('Fetcher error: '+err);
     filedb.processAll(function(err) {
-      if (err) winston.error(err);
+      if (err) winston.error('File processing error: '+err);
       if (hasmore) backgroundTask();
       else setTimeout(backgroundTask, 60*1000);
     });
   });
 }
-db.prepare(function(err) {
-  if (err) winston.error(err);
-  filedb.processAll(function(err) {
-    if (err) winston.error(err);
-    backgroundTask();
-  });
-});
 
 var server = app(config);
 public.setup(config, server);
 private.setup(config, server);
 api.setup(config, server);
 
-var port = process.env.PORT || 3000;
-server.listen(port);
+db.prepare(function(err) {
+  if (err) winston.error('Preparing database error: '+err);
+  filedb.processAll(function(err) {
+    if (err) winston.error('File processing error: '+err);
+    backgroundTask();
+  });
 
-console.log('Listening on %d', port);
+  var port = process.env.PORT || 3000;
+  server.listen(port);
+
+  console.log('Listening on %d', port);
+});
