@@ -21,6 +21,7 @@ var markers = new L.MarkerClusterGroup({
 });
 map.addLayer(markers);
 
+var authors = [];
 var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
 function convertDateTime(str) {
   if (typeof(str) !== 'string') return null;
@@ -40,38 +41,63 @@ function formatAuthor(author) {
   }
   return author;
 }
+function parseCoordinate(position) {
+  if (!position) return null;
 
-$.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
-  var authors = [];
-  _.each(data.messages, function(msg) {
+  var regexp = new RegExp("^(\\d{1,2}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (N|S), (\\d{1,3}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (E|W)");
+  var match = position.match(regexp);
+  if (!match) return null;
+
+  var lat = parseInt(match[1]) + (1/60*parseInt(match[2])) + (1/3600*parseFloat(match[3]))
+  var lon = parseInt(match[6]) + (1/60*parseInt(match[7])) + (1/3600*parseFloat(match[8]))
+  if (match[5] === 'S') lat = -lat;
+  if (match[10] === 'W') lon = -lon;
+
+  return [lat, lon];
+}
+function addMarker(type, coordinate, msgid, title, author, imgid, datetime) {
+  if (!_.contains(authors, author)) {
+    authors.push(author);
+  }
+
+  var icon = L.AwesomeMarkers.icon({
+    icon: type,
+    markerColor: markerColors[_.indexOf(authors, author)%markerColors.length]
+  });
+  var marker = L.marker(coordinate, {icon: icon});
+
+  var content = '<a href="/message/'+msgid+'"><b>'+title+'</b></a><br>'
+  content += formatAuthor(author)+'<br>';
+  if (datetime) content += datetime+'<br>';
+  if (imgid) content += '<a href="/message/'+msgid+'"><img width="160" height="160" src="/attachment/'+imgid+'/square"></a>';
+  marker.bindPopup(content);
+  markers.addLayer(marker);
+}
+function getVideoCoordinate(metadata) {
+  return metadata['GPSPosition']
+    || metadata['GPSCoordinates']
+    || metadata['GPSCoordinates-fin'];
+}
+
+$.getJSON('/api/message/', function(messages) {
+  _.each(messages, function(msg) {
     _.each(msg.images, function(img) {
       if (!img.metadata || !img.metadata.GPSPosition) return;
-      if (!_.contains(authors, msg.author)) {
-        authors.push(msg.author);
-      }
 
-      var regexp = new RegExp("^(\\d{1,2}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (N|S), (\\d{1,3}) deg (\\d{1,2})' (\\d{1,2}(.\\d+)?)\" (E|W)$");
-      var match = img.metadata.GPSPosition.match(regexp);
-      if (!match) return;
-
-      var lat = parseInt(match[1]) + (1/60*parseInt(match[2])) + (1/3600*parseFloat(match[3]))
-      var lon = parseInt(match[6]) + (1/60*parseInt(match[7])) + (1/3600*parseFloat(match[8]))
-      if (match[5] === 'S') lat = -lat;
-      if (match[10] === 'W') lon = -lon;
-
-      var icon = L.AwesomeMarkers.icon({
-        icon: 'camera',
-        markerColor: markerColors[_.indexOf(authors, msg.author)%markerColors.length]
-      });
-      var marker = L.marker([lat, lon], {icon: icon});
-
+      var position = img.metadata.GPSPosition;
+      var coordinate = parseCoordinate(position);
       var datetime = convertDateTime(img.metadata.DateTimeOriginal);
-      var content = '<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br>'
-      content += formatAuthor(msg.author)+'<br>';
-      if (datetime) content += datetime+'<br>';
-      content += '<a href="/message/'+msg.id+'"><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>';
-      marker.bindPopup(content);
-      markers.addLayer(marker);
+      addMarker('camera', coordinate, msg.id, msg.title, msg.author, img.id, datetime)
+    });
+    _.each(msg.videos, function(video) {
+      if (!video.metadata || !getVideoCoordinate(video.metadata)) return;
+
+      var position = getVideoCoordinate(video.metadata);
+      var coordinate = parseCoordinate(position);
+      var datetime = convertDateTime(video.metadata.CreateDate);
+      if (coordinate) {
+        addMarker('film', coordinate, msg.id, msg.title, msg.author, null, datetime)
+      }
     });
   });
 });
