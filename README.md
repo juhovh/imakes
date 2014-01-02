@@ -75,7 +75,7 @@ REST API
 
 The JSON API consists of the following endpoints:
 
-### Direct database access endpoints
+### Direct access endpoints
 
 ```
 GET /api/user/                    - returns a list of all users on the system
@@ -136,9 +136,11 @@ sparingly.
 The order_by parameter can contain a list of order parameters in the format field_(asc|desc).
 Supported fields are `id`, `title`, `author`, `timestamp` and `favorited` the default being always
 `id_asc`, except for favorites by user search where the default is favorite timestamp only relevant
-for that particular search query. If only field name is specified or the sorting order is unknown,
-then `asc` is always used as the default. If multiple order_by parameters are given, the first ones
-will always have higher precedence than the latter ones.
+for that particular search query. The field `favorited` refers to the number of people that have
+favorited a particular message and the field `id` refers to the growing ID number of the messages.
+If only field name is specified or the sorting order is unknown, then `asc` is always used as the
+default. If multiple order_by parameters are given, the first ones will always have higher
+precedence than the latter ones.
 
 ### Message search results
 
