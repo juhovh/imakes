@@ -31,7 +31,7 @@ exports.generateQuery = function(select, from, join, options) {
     query.where.push('message.timestamp >= ' + options.from.getTime());
   }
   if (_.isDate(options.until)) {
-    query.where.push('message.timestamp <= ' + options.until.getTime());
+    query.where.push('message.timestamp < ' + options.until.getTime());
   }
   if (typeof(options.search) === 'string') {
     var words = _.compact(options.search.split(' '));
