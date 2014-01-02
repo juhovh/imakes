@@ -62,21 +62,6 @@ exports.setup = function(config, app) {
     }
   }
 
-  app.get('/api/', authenticate, function(req, res) {
-    res.send({
-      users: '/api/user',
-      user: '/api/user/1',
-      favorites: '/api/user/1/favorite/',
-      messages: '/api/message/',
-      message: '/api/message/1',
-      searchFavorites: '/api/search/favorites?order_by=favorited_desc,id_desc&offset=0&limit=20',
-      searchFavoritesByUser: '/api/search/favorites/1',
-      searchMessages: '/api/search/messages?from=1325376000000&until=1356998400000',
-      searchImages: '/api/search/images?key=aki&order_by=id_desc&offset=0&limit=20',
-      searchVideos: '/api/search/videos'
-    });
-  });
-
   app.get('/api/user/', authenticate, function(req, res, next) {
     db.listUsers(function(err, result) {
       if (err) return next(err);
