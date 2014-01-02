@@ -45,14 +45,19 @@ exports.generateQuery = function(select, from, join, options) {
     });
   }
   if (typeof(options.metadata) === 'string') {
-    var keys = _.compact(options.metadata.split(','));
-    keys.forEach(function(key) {
-      // Escape each key separately
-      key = key.replace(/"/g, "\\\"");
-      key = key.replace(/'/g, "''");
-      key = key.replace(/%/g, "\\%");
-      key = key.replace(/_/g, "\\_");
-      query.where.push("attachment.metadata LIKE '%\""+key+"\":%' ESCAPE '\\'");
+    var terms = _.compact(options.metadata.split(','));
+    terms.forEach(function(term) {
+      var queries = [];
+      var keys = _.compact(term.split('|'));
+      keys.forEach(function(key) {
+        // Escape each key separately
+        key = key.replace(/"/g, "\\\"");
+        key = key.replace(/'/g, "''");
+        key = key.replace(/%/g, "\\%");
+        key = key.replace(/_/g, "\\_");
+        queries.push("attachment.metadata LIKE '%\""+key+"\":%' ESCAPE '\\'");
+      });
+      query.where.push('('+joinStringArray(queries, ' OR ')+')');
     });
   }
   if (options.favorite != null) {

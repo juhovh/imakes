@@ -79,8 +79,8 @@ function getVideoCoordinate(metadata) {
     || metadata['GPSCoordinates-fin'];
 }
 
-$.getJSON('/api/message/', function(messages) {
-  _.each(messages, function(msg) {
+$.getJSON('/api/search/messages?metadata_contains=GPSPosition|GPSCoordinates|GPSCoordinates-fin', function(data) {
+  _.each(data.messages, function(msg) {
     _.each(msg.images, function(img) {
       if (!img.metadata || !img.metadata.GPSPosition) return;
 
