@@ -29,7 +29,7 @@
     "sprintf-js": "0.0.7",
     "mkdirp": "0.3.5",
     "gm": "1.13.2",
-    "avconv": "0.2.6",
+    "avconv": "0.2.6-2",
     "express": "3.4.3",
     "passport": "0.1.17",
     "passport-google": "0.3.0",
