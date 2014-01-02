@@ -28,6 +28,18 @@ function convertDateTime(str) {
   if (!match) return null;
   return parseInt(match[3])+'.'+parseInt(match[2])+'.'+match[1]+' '+parseInt(match[4])+':'+match[5];
 }
+function formatAuthor(author) {
+  if (!author) {
+    return '(Unknown)';
+  } else if (match = author.match(new RegExp('\\"(.*)\\".*<.*>'))) {
+    return match[1].trim();
+  } else if (match = author.match(new RegExp('(.*)<.*>'))) {
+    return match[1].trim();
+  } else if (match = author.match(new RegExp('(.*)@.*'))) {
+    return match[1].trim();
+  }
+  return author;
+}
 
 $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
   var authors = [];
@@ -52,9 +64,11 @@ $.getJSON('/api/search/images?metadata_contains=GPSPosition', function(data) {
         markerColor: markerColors[_.indexOf(authors, msg.author)%markerColors.length]
       });
       var marker = L.marker([lat, lon], {icon: icon});
-      var content = '<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br>'
+
       var datetime = convertDateTime(img.metadata.DateTimeOriginal);
-      if (datetime) content += 'Taken: '+datetime+'<br>';
+      var content = '<a href="/message/'+msg.id+'"><b>'+msg.title+'</b></a><br>'
+      content += formatAuthor(msg.author)+'<br>';
+      if (datetime) content += datetime+'<br>';
       content += '<a href="/message/'+msg.id+'"><img width="160" height="160" src="/attachment/'+img.id+'/square"></a>';
       marker.bindPopup(content);
       markers.addLayer(marker);
