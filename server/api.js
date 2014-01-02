@@ -142,8 +142,8 @@ exports.setup = function(config, app) {
   function generateOrderBy(str) {
     var mapping = {
       id: 'message.id',
-      title: 'message.title',
-      author: 'message.author',
+      title: 'message.title COLLATE NOCASE',
+      author: 'message.author COLLATE NOCASE',
       timestamp: 'message.timestamp',
       favorited: 'COUNT(DISTINCT favorite.user_id)'
     };
