@@ -2,6 +2,7 @@ var winston = require('winston');
 
 var config = require('./config');
 
+var db = require('./server/db');
 var filedb = require('./server/filedb');
 var fetcher = require('./server/fetcher')(config.imap);
 
@@ -20,9 +21,12 @@ function backgroundTask() {
     });
   });
 }
-filedb.processAll(function(err) {
+db.prepare(function(err) {
   if (err) winston.error(err);
-  backgroundTask();
+  filedb.processAll(function(err) {
+    if (err) winston.error(err);
+    backgroundTask();
+  });
 });
 
 var server = app(config);

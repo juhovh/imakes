@@ -9,14 +9,19 @@ var db = new sqlite3.cached.Database('imakes.db', sqlite3.READWRITE);
 var filedb = require('./filedb');
 var dbutils = require('./dbutils');
 
-// Configure busyTimeout to avoid busy errors
-db.configure('busyTimeout', 2000);
-
 // Use some ugly undocumented hacks on the mime library
 mime.extensions['image/jpg'] = 'jpg';
 mime.extensions['image/jpeg'] = 'jpg';
 mime.extensions['image/pjpeg'] = 'jpg';
 mime.extensions['video/quicktime'] = 'mov';
+
+exports.prepare = function(callback) {
+  // Configure busyTimeout to avoid busy errors
+  db.configure('busyTimeout', 2000);
+
+  // Enable foreign keys, disabled by default
+  db.run('PRAGMA foreign_keys=ON', callback);
+};
 
 exports.listUsers = function(callback) {
   db.all('SELECT * FROM user', callback);
