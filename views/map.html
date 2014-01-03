@@ -67,7 +67,7 @@ function addMarker(type, coordinate, msgid, title, author, imgid, datetime) {
   var marker = L.marker(coordinate, {icon: icon});
 
   var content = '<a href="/message/'+msgid+'"><b>'+title+'</b></a><br>'
-  content += formatAuthor(author)+'<br>';
+  content += author+'<br>';
   if (datetime) content += datetime+'<br>';
   if (imgid) content += '<a href="/message/'+msgid+'"><img width="160" height="160" src="/attachment/'+imgid+'/square"></a>';
   marker.bindPopup(content);
@@ -81,13 +81,14 @@ function getVideoCoordinate(metadata) {
 
 $.getJSON('/api/search/messages?metadata_contains=GPSPosition|GPSCoordinates|GPSCoordinates-fin', function(data) {
   _.each(data.messages, function(msg) {
+    var author = _.isObject(msg.owner) ? msg.owner.name : formatAuthor(msg.author);
     _.each(msg.images, function(img) {
       if (!img.metadata || !img.metadata.GPSPosition) return;
 
       var position = img.metadata.GPSPosition;
       var coordinate = parseCoordinate(position);
       var datetime = convertDateTime(img.metadata.DateTimeOriginal);
-      addMarker('camera', coordinate, msg.id, msg.title, msg.author, img.id, datetime)
+      addMarker('camera', coordinate, msg.id, msg.title, author, img.id, datetime)
     });
     _.each(msg.videos, function(video) {
       if (!video.metadata || !getVideoCoordinate(video.metadata)) return;
@@ -96,7 +97,7 @@ $.getJSON('/api/search/messages?metadata_contains=GPSPosition|GPSCoordinates|GPS
       var coordinate = parseCoordinate(position);
       var datetime = convertDateTime(video.metadata.CreateDate);
       if (coordinate) {
-        addMarker('film', coordinate, msg.id, msg.title, msg.author, null, datetime)
+        addMarker('film', coordinate, msg.id, msg.title, author, null, datetime)
       }
     });
   });
