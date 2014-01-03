@@ -176,11 +176,20 @@ exports.populateMessage = function(message, callback) {
       });
     },
     function(callback) {
-      var query = 'SELECT user.*, favorite.timestamp AS timestamp FROM user,favorite WHERE user.id = favorite.user_id AND favorite.message_id = ?';
+      var query = 'SELECT user.*, favorite.timestamp AS timestamp FROM user, favorite WHERE user.id = favorite.user_id AND favorite.message_id = ?';
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
         message.favorited = rows;
+        callback();
+      });
+    },
+    function(callback) {
+      var query = 'SELECT user.* FROM user, alias WHERE user.id = alias.user_id AND alias.author = ?';
+      var params = [message.author];
+      db.get(query, params, function(err, row) {
+        if (err) return callback(err);
+        if (row) message.owner = row;
         callback();
       });
     }
