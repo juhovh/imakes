@@ -72,7 +72,16 @@ exports.setup = function(config, app) {
         memo[value.year][value.month] += value.count;
         return memo;
       }, {});
-      res.send({ total: total });
+      var users = result.reduce(function(memo, value, idx) {
+        if (!value.author) return memo;
+        if (!memo[value.author]) memo[value.author] = {};
+        if (!memo[value.author][value.year]) memo[value.author][value.year] = {};
+        if (!memo[value.author][value.year][value.month]) {
+          memo[value.author][value.year][value.month] = value.count;
+        }
+        return memo;
+      }, {});
+      res.send({ total: total, users: users });
     });
   })
 
