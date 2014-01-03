@@ -53,7 +53,8 @@ exports.setup = function(config, app) {
       options.limit = PAGESIZE,
       options.offset = (page-1)*PAGESIZE
     }
-    db.listImages(options, function(err, result) {
+    options.images = true;
+    db.listMessages(options, function(err, result) {
       if (err) return next(err);
       result.messages.forEach(function(message) {
         prepareMessage(message, req.user.id);
@@ -83,7 +84,8 @@ exports.setup = function(config, app) {
       options.limit = PAGESIZE,
       options.offset = (page-1)*PAGESIZE
     }
-    db.listVideos(options, function(err, result) {
+    options.videos = true;
+    db.listMessages(options, function(err, result) {
       if (err) return next(err);
       result.messages.forEach(function(message) {
         prepareMessage(message, req.user.id);
