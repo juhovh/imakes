@@ -102,6 +102,36 @@ exports.setup = function(config, app) {
     });
   });
 
+  app.get('/mymessages', authenticate, function(req, res, next) {
+    var options = {
+      deleted: false,
+      processed: true,
+      order_by: 'message.id DESC'
+    };
+    var page = req.query.page;
+    if (!page || page < 1) page = 1;
+    if (page >= 1) {
+      page = parseInt(page);
+      options.limit = PAGESIZE,
+      options.offset = (page-1)*PAGESIZE
+    }
+    options.userid = req.user.id;
+    db.listMessages(options, function(err, result) {
+      if (err) return next(err);
+      result.messages.forEach(function(message) {
+        prepareMessage(message, req.user.id);
+      });
+      res.render('messagelist', {
+        url: '/mymessages',
+        user: req.user,
+        username: format.user(req.user),
+        messages: result.messages,
+        page: page,
+        lastpage: Math.floor((result.totalMessages+PAGESIZE-1)/PAGESIZE)
+      });
+    });
+  });
+
   app.get('/favorites', authenticate, function(req, res, next) {
     var options = {
       deleted: false,
