@@ -20,7 +20,6 @@ brew install exiftool
 brew install graphicsmagick
 brew install libav --with-libvo-aacenc
 brew install qtfaststart
-brew install sqlite3
 ```
 
 #### Ubuntu 12.04
