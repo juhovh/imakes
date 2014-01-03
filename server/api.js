@@ -18,10 +18,11 @@ function filterVideo(video) {
 }
 
 function filterMessage(message) {
+  if (message.owner) message.owner = filterUser(message.owner);
   _.each(message.favorited, function(element, index, list) { list[index] = filterUser(element); });
   _.each(message.images, function(element, index, list) { list[index] = filterImage(element); });
   _.each(message.videos, function(element, index, list) { list[index] = filterVideo(element); });
-  return _.pick(message, 'id', 'servertime', 'title', 'author', 'timestamp', 'images', 'videos', 'favorited');
+  return _.pick(message, 'id', 'owner', 'servertime', 'title', 'author', 'timestamp', 'images', 'videos', 'favorited');
 }
 
 function filterSearchQuery(query) {
