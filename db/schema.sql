@@ -19,6 +19,11 @@ CREATE TABLE "auth" (
   FOREIGN KEY("user_id") REFERENCES "user"("id")
 );
 CREATE UNIQUE INDEX "auth_idx" ON "auth"("provider","identifier");
+CREATE TABLE "alias" (
+  "user_id"     INTEGER NOT NULL,
+  "author"      TEXT NOT NULL UNIQUE,
+  FOREIGN KEY("user_id") REFERENCES "user"("id")
+);
 CREATE TABLE "message" (
   "id"          INTEGER PRIMARY KEY,
   "deleted"     INTEGER NOT NULL DEFAULT 0,
