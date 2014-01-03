@@ -191,21 +191,55 @@ exports.setup = function(config, app) {
   }
 
   app.get('/api/search/messages', authenticate, function(req, res, next) {
-    db.listMessages(generateSearchOptions(req), function(err, result) {
+    var options = generateSearchOptions(req);
+    db.listMessages(options, function(err, result) {
+      if (err) return next(err);
+      res.send(filterSearchResult(result, req.query));
+    });
+  });
+
+  app.get('/api/search/messages/:userid', authenticate, function(req, res, next) {
+    var options = generateSearchOptions(req);
+    options.userid = req.params.userid;
+    db.listMessages(options, function(err, result) {
       if (err) return next(err);
       res.send(filterSearchResult(result, req.query));
     });
   });
 
   app.get('/api/search/images', authenticate, function(req, res, next) {
-    db.listImages(generateSearchOptions(req), function(err, result) {
+    var options = generateSearchOptions(req);
+    options.images = true;
+    db.listMessages(options, function(err, result) {
+      if (err) return next(err);
+      res.send(filterSearchResult(result, req.query));
+    });
+  });
+
+  app.get('/api/search/images/:userid', authenticate, function(req, res, next) {
+    var options = generateSearchOptions(req);
+    options.userid = req.params.userid;
+    options.images = true;
+    db.listMessages(options, function(err, result) {
       if (err) return next(err);
       res.send(filterSearchResult(result, req.query));
     });
   });
 
   app.get('/api/search/videos', authenticate, function(req, res, next) {
-    db.listVideos(generateSearchOptions(req), function(err, result) {
+    var options = generateSearchOptions(req);
+    options.videos = true;
+    db.listMessages(options, function(err, result) {
+      if (err) return next(err);
+      res.send(filterSearchResult(result, req.query));
+    });
+  });
+
+  app.get('/api/search/videos/:userid', authenticate, function(req, res, next) {
+    var options = generateSearchOptions(req);
+    options.userid = req.params.userid;
+    options.videos = true;
+    db.listMessages(options, function(err, result) {
       if (err) return next(err);
       res.send(filterSearchResult(result, req.query));
     });

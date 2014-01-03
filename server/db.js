@@ -176,51 +176,23 @@ exports.listMessages = function(options, callback) {
     options = {};
   }
   var params = [];
-  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
+  var tables = ['message','attachment'];
+  if (options.userid) tables.push('alias');
+  var query = dbutils.generateQuery('message.*', tables, options)
   query.where.push('attachment.deleted=0');
   query.where.push('message.id=attachment.message_id');
-  dbutils.listMessageQuery(query, params, function(err, result) {
-    if (err) return callback(err);
-    async.each(result.messages, function(message, callback) {
-      dbutils.populateMessage(message, callback);
-    }, function(err) {
-      if (err) callback(err);
-      else callback(null, result);
-    });
-  });
-};
-
-exports.listImages = function(options, callback) {
-  if (!callback) {
-    callback = options;
-    options = {};
+  if (options.userid) {
+    query.where.push('message.author=alias.author');
+    query.where.push('alias.user_id=?');
+    params.push(options.userid);
   }
-  var params = [];
-  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
-  query.where.push('attachment.filetype="image"');
-  query.where.push('attachment.deleted=0');
-  query.where.push('message.id=attachment.message_id');
-  dbutils.listMessageQuery(query, params, function(err, result) {
-    if (err) return callback(err);
-    async.each(result.messages, function(message, callback) {
-      dbutils.populateMessage(message, callback);
-    }, function(err) {
-      if (err) callback(err);
-      else callback(null, result);
-    });
-  });
-};
-
-exports.listVideos = function(options, callback) {
-  if (!callback) {
-    callback = options;
-    options = {};
+  if (options.images && options.videos) {
+    query.where.push('(attachment.filetype="image" OR attachment.filetype="video")');
+  } else if (options.images) {
+    query.where.push('attachment.filetype="image"');
+  } else if (options.videos) {
+    query.where.push('attachment.filetype="video"');
   }
-  var params = [];
-  var query = dbutils.generateQuery('message.*', ['message','attachment'], options)
-  query.where.push('attachment.filetype="video"');
-  query.where.push('attachment.deleted=0');
-  query.where.push('message.id=attachment.message_id');
   dbutils.listMessageQuery(query, params, function(err, result) {
     if (err) return callback(err);
     async.each(result.messages, function(message, callback) {
