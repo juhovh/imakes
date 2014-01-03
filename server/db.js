@@ -98,10 +98,11 @@ exports.deleteFavorite = function(userid, msgid, callback) {
 };
 
 exports.getStatistics = function(callback) {
-  var year = "strftime('%Y', message.timestamp/1000, 'unixepoch') AS year";
-  var month = "strftime('%m', message.timestamp/1000, 'unixepoch') AS month";
-  var query = 'SELECT '+year+', '+month+', message.author AS author, COUNT(attachment.id) AS count '
+  var year = "strftime('%Y', message.timestamp/1000, 'unixepoch')";
+  var month = "strftime('%m', message.timestamp/1000, 'unixepoch')";
+  var query = 'SELECT '+year+' AS year, '+month+' AS month, COUNT(attachment.id) AS count, user.name AS author '
             + 'FROM message, attachment '
+            + 'LEFT OUTER JOIN alias ON message.author = alias.author LEFT OUTER JOIN user ON alias.user_id = user.id '
             + 'WHERE message.id=attachment.message_id '
             + 'GROUP BY author, year, month';
   db.all(query, callback);
