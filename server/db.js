@@ -187,7 +187,7 @@ exports.listMessages = function(options, callback) {
     params.push(options.userid);
   }
   if (options.images && options.videos) {
-    query.where.push('(attachment.filetype="image" OR attachment.filetype="video")');
+    query.where.push('attachment.filetype IN ("image", "video")');
   } else if (options.images) {
     query.where.push('attachment.filetype="image"');
   } else if (options.videos) {
