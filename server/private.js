@@ -28,7 +28,11 @@ exports.setup = function(config, app) {
   }
 
   function prepareMessage(message, userid) {
-    message.author = format.author(message.author);
+    if (message.owner && message.owner.name) {
+      message.author = message.owner.name;
+    } else {
+      message.author = format.author(message.author);
+    }
     message.title = format.title(message.title);
     message.date = format.date(message.timestamp);
     message.time = format.time(message.timestamp);
