@@ -27,6 +27,14 @@ exports.listUsers = function(callback) {
   db.all('SELECT * FROM user', callback);
 };
 
+exports.listAuths = function(callback) {
+  db.all('SELECT * FROM auth', callback);
+};
+
+exports.listAliases = function(callback) {
+  db.all('SELECT * FROM alias', callback);
+};
+
 exports.getUser = function(userid, callback) {
   var query = 'SELECT * FROM user WHERE id=?';
   var params = [userid];
