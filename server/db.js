@@ -130,7 +130,7 @@ exports.addMessage = function(message, callback) {
       db.get('SELECT last_insert_rowid() AS rowid', function(err, row) {
         var messageid = row.rowid;
         var files = message.files.filter(function(file) { return /^(image|video)/.test(file.mimetype); });
-        files.forEach(function(file, idx) { file.idx = idx; });
+        files.forEach(function(file, idx) { file.idx = idx+1; });
 
         async.eachSeries(files, function(file, cb) {
           var extension = mime.extension(file.mimetype);
