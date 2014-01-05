@@ -100,9 +100,11 @@ exports.deleteFavorite = function(userid, msgid, callback) {
 exports.getStatistics = function(callback) {
   var year = "strftime('%Y', message.timestamp/1000, 'unixepoch')";
   var month = "strftime('%m', message.timestamp/1000, 'unixepoch')";
-  var query = 'SELECT '+year+' AS year, '+month+' AS month, COUNT(attachment.id) AS count, user.name AS author '
+  var query = 'SELECT '+year+' AS year, '+month+' AS month, COUNT(attachment.id) AS count, user1.name AS user1, message.author as author, user2.name AS user2 '
             + 'FROM message, attachment '
-            + 'LEFT OUTER JOIN alias ON message.author = alias.author LEFT OUTER JOIN user ON alias.user_id = user.id '
+            + 'LEFT OUTER JOIN user user1 ON message.user_id = user1.id '
+            + 'LEFT OUTER JOIN alias ON message.author = alias.author '
+            + 'LEFT OUTER JOIN user user2 ON alias.user_id = user2.id '
             + 'WHERE message.id=attachment.message_id '
             + 'GROUP BY author, year, month';
   db.all(query, callback);

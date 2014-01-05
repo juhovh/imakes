@@ -73,7 +73,17 @@ exports.setup = function(config, app) {
         return memo;
       }, {});
       var users = result.reduce(function(memo, value, idx) {
-        if (!value.author) return memo;
+        var user = value.user1 || value.user2;
+        if (!user) return memo;
+        if (!memo[user]) memo[user] = {};
+        if (!memo[user][value.year]) memo[user][value.year] = {};
+        if (!memo[user][value.year][value.month]) {
+          memo[user][value.year][value.month] = value.count;
+        }
+        return memo;
+      }, {});
+      var unknown = result.reduce(function(memo, value, idx) {
+        if (value.user1 || value.user2) return memo;
         if (!memo[value.author]) memo[value.author] = {};
         if (!memo[value.author][value.year]) memo[value.author][value.year] = {};
         if (!memo[value.author][value.year][value.month]) {
@@ -81,7 +91,7 @@ exports.setup = function(config, app) {
         }
         return memo;
       }, {});
-      res.send({ total: total, users: users });
+      res.send({ total: total, users: users, unknown: unknown });
     });
   })
 
