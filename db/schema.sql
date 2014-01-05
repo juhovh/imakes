@@ -26,6 +26,7 @@ CREATE TABLE alias (
 );
 CREATE TABLE message (
   id          INTEGER PRIMARY KEY,
+  user_id     INTEGER,
   deleted     INTEGER NOT NULL DEFAULT 0,
   imap_uid    INTEGER UNIQUE,
   servertime  DATETIME,
@@ -33,7 +34,8 @@ CREATE TABLE message (
   author      TEXT,
   timestamp   DATETIME NOT NULL,
   search      TEXT UNIQUE,
-  processed   INTEGER NOT NULL DEFAULT 0
+  processed   INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY(user_id) REFERENCES user(id)
 );
 CREATE TABLE attachment (
   id          INTEGER PRIMARY KEY,
