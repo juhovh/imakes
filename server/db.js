@@ -105,7 +105,7 @@ exports.getStatistics = function(callback) {
             + 'LEFT OUTER JOIN user user1 ON message.user_id = user1.id '
             + 'LEFT OUTER JOIN alias ON message.author = alias.author '
             + 'LEFT OUTER JOIN user user2 ON alias.user_id = user2.id '
-            + 'WHERE message.id=attachment.message_id '
+            + 'WHERE message.id=attachment.message_id AND message.deleted=0 AND attachment.deleted=0 '
             + 'GROUP BY author, year, month';
   db.all(query, callback);
 };
