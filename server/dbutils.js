@@ -185,13 +185,26 @@ exports.populateMessage = function(message, callback) {
       });
     },
     function(callback) {
-      var query = 'SELECT user.* FROM user, alias WHERE user.id = alias.user_id AND alias.author = ?';
-      var params = [message.author];
-      db.get(query, params, function(err, row) {
-        if (err) return callback(err);
-        if (row) message.owner = row;
+      if (message.user_id) {
+        var query = 'SELECT * FROM user WHERE user.id = ?';
+        var params = [message.user_id];
+        db.get(query, params, function(err, row) {
+          if (err) return callback(err);
+          if (row) message.owner = row;
+          callback();
+        });
+      } else if (message.author) {
+        // User id not specified, try mapping with alias and author
+        var query = 'SELECT user.* FROM user, alias WHERE user.id = alias.user_id AND alias.author = ?';
+        var params = [message.author];
+        db.get(query, params, function(err, row) {
+          if (err) return callback(err);
+          if (row) message.owner = row;
+          callback();
+        });
+      } else {
         callback();
-      });
+      }
     }
   ], function(err) {
     callback(err, message);
