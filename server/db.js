@@ -185,9 +185,8 @@ exports.listMessages = function(options, callback) {
   query.where.push('attachment.deleted=0');
   query.where.push('message.id=attachment.message_id');
   if (options.userid) {
-    query.where.push('message.author=alias.author');
-    query.where.push('alias.user_id=?');
-    params.push(options.userid);
+    query.where.push('(message.user_id=? OR (message.author=alias.author AND alias.user_id=?))');
+    params = params.concat([options.userid, options.userid]);
   }
   if (options.images && options.videos) {
     query.where.push('attachment.filetype IN ("image", "video")');
