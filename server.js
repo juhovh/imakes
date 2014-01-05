@@ -10,6 +10,7 @@ var app = require('./server/app');
 var public = require('./server/public');
 var private = require('./server/private');
 var api = require('./server/api');
+var admin = require('./server/admin');
 
 function backgroundTask() {
   fetcher(function(err, hasmore) {
@@ -26,6 +27,7 @@ var server = app(config);
 public.setup(config, server);
 private.setup(config, server);
 api.setup(config, server);
+admin.setup(config, server);
 
 db.prepare(function(err) {
   if (err) winston.error('Preparing database error: '+err);
