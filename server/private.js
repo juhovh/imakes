@@ -110,7 +110,7 @@ exports.setup = function(config, app) {
     var options = {
       deleted: false,
       processed: true,
-      order_by: 'message.id DESC'
+      order_by: ['COUNT(DISTINCT favorite.user_id) DESC', 'message.id DESC']
     };
     var page = req.query.page;
     if (!page || page < 1) page = 1;
