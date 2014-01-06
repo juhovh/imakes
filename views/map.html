@@ -19,7 +19,6 @@ var markers = new L.MarkerClusterGroup({
   maxClusterRadius: 50,
   disableClusteringAtZoom: 15
 });
-map.addLayer(markers);
 
 var authors = [];
 var markerColors = ['red', 'darkred', 'orange', 'green', 'darkgreen', 'blue', 'purple', 'darkpuple', 'cadetblue'];
@@ -101,6 +100,7 @@ $.getJSON('/api/search/messages?metadata_contains=GPSPosition|GPSCoordinates|GPS
       }
     });
   });
+  map.addLayer(markers);
 });
 
 </script>
