@@ -28,39 +28,29 @@ angular.module('imakes', ['ngRoute'])
 })
 
 .config(function($routeProvider) {
+  var messageListRoute = {
+    controller: 'MessageListCtrl',
+    templateUrl: 'messagelist.html',
+  };
   $routeProvider
-    .when('/images', {
-      controller: 'ListCtrl',
-      templateUrl: 'messagelist.html',
-    })
-    .when('/videos', {
-      controller: 'ListCtrl',
-      templateUrl: 'messagelist.html',
-    })
-    .when('/mymessages', {
-      controller: 'ListCtrl',
-      templateUrl: 'messagelist.html',
-    })
-    .when('/favorites', {
-      controller: 'ListCtrl',
-      templateUrl: 'messagelist.html',
-    })
-    .when('/popular', {
-      controller: 'ListCtrl',
-      templateUrl: 'messagelist.html',
-    })
+    .when('/images', messageListRoute)
+    .when('/videos', messageListRoute)
+    .when('/mymessages', messageListRoute)
+    .when('/favorites', messageListRoute)
+    .when('/popular', messageListRoute)
     .otherwise({
       redirectTo: '/images'
     });
 })
 
-.controller('ListCtrl', function($scope, $location, $routeParams, messageSearch) {
+.controller('MessageListCtrl', function($scope, $location, $routeParams, messageSearch) {
   var promise;
   var params = {limit: 20};
   if (/^\/images/.test($location.url())) {
     params.order_by = 'id_desc';
     promise = messageSearch.searchImages(params);
   } else if (/^\/videos/.test($location.url())) {
+    params.limit = 10;
     params.order_by = 'id_desc';
     promise = messageSearch.searchVideos(params);
   } else if (/^\/mymessages/.test($location.url())) {
