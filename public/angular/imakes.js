@@ -74,6 +74,14 @@ angular.module('imakes', ['ngRoute'])
   }
   if (promise) promise.then(function(result) {
     angular.forEach(result.data.messages, function(message) {
+      var ts = new Date(message.timestamp);
+      message.date = ts.getDate()+'.'+(ts.getMonth()+1)+'.'+ts.getFullYear();
+      message.time = (ts.getHours()<10?'0':'')+ts.getHours()
+                   + '.'
+                   + (ts.getMinutes()<10?'0':'')+ts.getMinutes();
+      if (message.owner && message.owner.name) {
+        message.author = message.owner.name;
+      }
       angular.forEach(message.images, function(image) {
         image.src = '/attachment/'+image.id+'/medium';
       });
