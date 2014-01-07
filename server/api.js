@@ -10,11 +10,11 @@ function filterUser(user) {
 }
 
 function filterImage(image) {
-  return _.pick(image, 'id', 'width', 'height', 'metadata');
+  return _.pick(image, 'id', 'types', 'metadata');
 }
 
 function filterVideo(video) {
-  return _.pick(video, 'id', 'width', 'height', 'metadata');
+  return _.pick(video, 'id', 'types', 'metadata');
 }
 
 function filterMessage(message) {
