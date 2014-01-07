@@ -1,0 +1,18 @@
+<div class="message">
+  <h3><a href="#/message/{{message.id}}">{{message.title}}</a></h3>
+  <h5>{{message.date}} at {{message.time}} by {{message.author}}</h5>
+  <h6>
+    Liked by {{message.favorited.length}} people
+    <button type="button" ng-class="{ btn: true, 'btn-primary': true, 'btn-sm': true, 'btn-favorite': true, active: message.favorite }">Like</button>
+  </h6>
+  <div class="image" ng-repeat="image in message.images">
+    <a href="/attachment/{{image.id}}/large"><img class="img-responsive" ng-src="{{image.src}}"></a>
+  </div>
+  <div class="video" ng-repeat="video in message.videos">
+    <div class="flowplayer">
+      <video preload="none" ng-poster="/attachment/{{video.id}}/screenshot">
+        <source type="video/mp4" ng-src="{{video.src}}">
+      </video>
+    </div>
+  </div>
+</div>
