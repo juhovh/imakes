@@ -15,25 +15,45 @@ var imagedir = path.normalize(__dirname + '/../files/images/');
 var videodir = path.normalize(__dirname + '/../files/videos/');
 var originalsize = 'original'
 
+function getResizeFunction(maxsize) {
+  return function(origwidth, origheight) {
+    if (origwidth > origheight) {
+      return {
+        width: maxsize,
+        height: Math.round(maxsize/origwidth*origheight)
+      };
+    } else {
+      return {
+        width: Math.round(maxsize/origheight*origwidth),
+        height: maxsize
+      };
+    }
+  }
+}
+
 var imageSizes = [
   {
     width: 140,
     height: 140,
     options: '^',
-    square: true,
-    size: 'square'
+    crop: true,
+    size: 'square',
+    calculate: function() { return { width: 140, height: 140 }; }
   },{
     width: 320,
     height: 320,
-    size: 'small'
+    size: 'small',
+    calculate: getResizeFunction(320)
   },{
     width: 640,
     height: 640,
-    size: 'medium'
+    size: 'medium',
+    calculate: getResizeFunction(640)
   },{
     width: 1024,
     height: 1024,
-    size: 'large'
+    size: 'large',
+    calculate: getResizeFunction(1024)
   }
 ];
 
@@ -140,6 +160,12 @@ exports.getImagePath = function(filename, sizename, callback) {
   callback(null, imagedir+sizename+'/'+filename);
 };
 
+exports.getImageTypes = function(width, height) {
+  return imageSizes.map(function(size) {
+    return _.extend({name: size.size}, size.calculate(width, height));
+  });
+};
+
 exports.addVideo = function(filename, data, callback) {
   var outputdir = videodir+originalsize+'/';
   mkdirp(outputdir, function(err) {
@@ -160,6 +186,16 @@ exports.getVideoPath = function(filename, formatname, callback) {
   callback(null, videodir+formatname+'/'+getVideoFilename(filename, format.ext));
 };
 
+exports.getVideoTypes = function(width, height) {
+  return videoFormats.map(function(format) {
+    return {
+      name: format.name,
+      width: videoWidth,
+      height: videoHeight
+    };
+  });
+};
+
 function processImage(image, imgcb) {
   var inputfile = imagedir+originalsize+'/'+image.filename;
   winston.info('Processing image %s', image.filename);
@@ -173,7 +209,7 @@ function processImage(image, imgcb) {
                 .autoOrient()
                 .noProfile()
                 .resize(size.width, size.height, size.options);
-      if (size.square) {
+      if (size.crop) {
         res = res.gravity('Center').extent(size.width, size.height);
       }
       mkdirp(outputdir, function(err) {

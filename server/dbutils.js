@@ -3,6 +3,7 @@ var async = require('async');
 var sqlite3 = require('sqlite3');
 
 var db = new sqlite3.cached.Database('imakes.db', sqlite3.READWRITE);
+var filedb = require('./filedb');
 
 exports.generateQuery = function(select, from, join, options) {
   if (!options) {
@@ -169,8 +170,14 @@ exports.populateMessage = function(message, callback) {
         if (err) return callback(err);
         rows.forEach(function(row) {
           if (row.metadata) row.metadata = JSON.parse(row.metadata);
-          if (/^image$/.test(row.filetype)) message.images.push(row);
-          if (/^video$/.test(row.filetype)) message.videos.push(row);
+          if (/^image$/.test(row.filetype)) {
+            row.types = filedb.getImageTypes(row.width, row.height);
+            message.images.push(row);
+          }
+          if (/^video$/.test(row.filetype)) {
+            row.types = filedb.getVideoTypes(row.width, row.height);
+            message.videos.push(row);
+          }
         });
         callback();
       });
