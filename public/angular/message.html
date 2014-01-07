@@ -9,10 +9,6 @@
     <a href="/attachment/{{image.id}}/large"><img class="img-responsive" ng-src="{{image.src}}"></a>
   </div>
   <div class="video" ng-repeat="video in message.videos">
-    <div class="flowplayer">
-      <video preload="none" ng-poster="/attachment/{{video.id}}/screenshot">
-        <source type="video/mp4" ng-src="{{video.src}}">
-      </video>
-    </div>
+    <div imakes-flowplayer="{{video.id}}">
   </div>
 </div>
