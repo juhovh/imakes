@@ -1,5 +1,11 @@
 angular.module('imakes', ['ngRoute'])
 
+.run(function($rootScope, $location) {
+  $rootScope.isActive = function(url) {
+    return new RegExp("^"+url).test($location.url());
+  };
+})
+
 .factory('messageSearch', function($http) {
   function getSearch(type) {
     return function (userid, params) {
