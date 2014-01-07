@@ -65,7 +65,6 @@ exports.setup = function(config, app) {
   }
 
   app.get('/api/user.js', authenticate, function(req, res, next) {
-    console.log(req.user);
     var userjson = JSON.stringify(filterUser(req.user));
     var response = 'var user = JSON.parse("'
                  + userjson.replace(/"/g, '\\"')
