@@ -1,11 +1,11 @@
 angular.module('imakes', ['ngRoute'])
 
 .run(function($rootScope, $location) {
+  $rootScope.userid = user.id;
+  $rootScope.username = user.name;
   $rootScope.isActive = function(url) {
     return new RegExp("^"+url).test($location.url());
   };
-  $rootScope.userid = user.id;
-  $rootScope.username = user.name;
 })
 
 .factory('messageSearch', function($http) {
@@ -72,6 +72,9 @@ angular.module('imakes', ['ngRoute'])
       if (message.owner && message.owner.name) {
         message.author = message.owner.name;
       }
+      angular.forEach(message.favorited, function(user) {
+        if (user.id === $scope.userid) message.favorite = true;
+      });
       angular.forEach(message.images, function(image) {
         image.src = '/attachment/'+image.id+'/medium';
       });
