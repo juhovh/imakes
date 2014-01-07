@@ -44,6 +44,10 @@ exports.setup = function(config, app) {
     }
   }
 
+  app.get('/user.js', authenticate, function(req, res, next) {
+    res.send(req.user);
+  });
+
   app.get('/images', authenticate, function(req, res, next) {
     var options = {
       deleted: false,

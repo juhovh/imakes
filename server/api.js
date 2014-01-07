@@ -49,6 +49,7 @@ exports.setup = function(config, app) {
         id: 1,
         admin: 1,
         deleted: 0,
+        name: 'Admin',
         provider: 'github',
         identifier: '123456',
         username: 'admin',
@@ -62,6 +63,16 @@ exports.setup = function(config, app) {
       next();
     }
   }
+
+  app.get('/api/user.js', authenticate, function(req, res, next) {
+    console.log(req.user);
+    var userjson = JSON.stringify(filterUser(req.user));
+    var response = 'var user = JSON.parse("'
+                 + userjson.replace(/"/g, '\\"')
+                 + '");'
+    res.header('Content-Type', 'text/javascript');
+    res.send(response);
+  });
 
   app.get('/api/stats', authenticate, function(req, res, next) {
     db.getStatistics(function(err, result) {

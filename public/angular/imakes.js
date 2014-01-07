@@ -4,6 +4,8 @@ angular.module('imakes', ['ngRoute'])
   $rootScope.isActive = function(url) {
     return new RegExp("^"+url).test($location.url());
   };
+  $rootScope.userid = user.id;
+  $rootScope.username = user.name;
 })
 
 .factory('messageSearch', function($http) {
@@ -63,9 +65,9 @@ angular.module('imakes', ['ngRoute'])
     promise = messageSearch.searchVideos(params);
   } else if (/^\/mymessages/.test($location.url())) {
     params.order_by = 'favorited_desc,id_desc';
-    promise = messageSearch.searchMessages(8, params);
+    promise = messageSearch.searchMessages($scope.userid, params);
   } else if (/^\/favorites/.test($location.url())) {
-    promise = messageSearch.searchFavorites(8);
+    promise = messageSearch.searchFavorites($scope.userid);
   } else if (/^\/popular/.test($location.url())) {
     params.order_by = 'favorited_desc,id_desc';
     promise = messageSearch.searchFavorites(params);
