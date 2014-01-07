@@ -1,6 +1,6 @@
 /*!
 
-   Flowplayer v5.4.6 (Tuesday, 17. December 2013 08:57PM) | flowplayer.org/license
+   Flowplayer v5.4.6 (2013-12-17) | flowplayer.org/license
 
 */
 !function($) { 
@@ -168,7 +168,7 @@ $.fn.flowplayer = function(opts, callback) {
          engine;
 
       if (conf.playlist.length) { // Create initial video tag if called without
-         var preload = videoTag.attr('preload'), placeHolder;
+         var preload = conf.preload || videoTag.attr('preload'), placeHolder;
          if (videoTag.length) videoTag.replaceWith(placeHolder = $('<p />'));
          videoTag = $('<video />').addClass('fp-engine');
          placeHolder ? placeHolder.replaceWith(videoTag) : root.prepend(videoTag);
@@ -2578,4 +2578,3 @@ $.fn.fptip = function(trigger, active) {
 };
 
 }(jQuery);
-flowplayer(function(e,o){function l(e){var o=a("<a/>")[0];return o.href=e,o.hostname}var a=jQuery,r=e.conf,i=r.swf.indexOf("flowplayer.org")&&r.e&&o.data("origin"),n=i?l(i):location.hostname,t=r.key;if("file:"==location.protocol&&(n="localhost"),e.load.ed=1,r.hostname=n,r.origin=i||location.href,i&&o.addClass("is-embedded"),"string"==typeof t&&(t=t.split(/,\s*/)),t&&"function"==typeof key_check&&key_check(t,n))r.logo&&o.append(a("<a>",{"class":"fp-logo",href:i}).append(a("<img/>",{src:r.logo})));else{var s=a("<a/>").attr("href","http://flowplayer.org").appendTo(o);a(".fp-controls",o);var p=a('<div class="fp-context-menu"><ul><li class="copyright">&copy; 2013</li><li><a href="http://flowplayer.org">About Flowplayer</a></li><li><a href="http://flowplayer.org/license">GPL based license</a></li></ul></div>').appendTo(o);e.bind("pause resume finish unload",function(e,l){var r=-1;l.video.src&&a.each([["org","flowplayer","drive"],["org","flowplayer","my"]],function(e,o){return r=l.video.src.indexOf("://"+o.reverse().join(".")),-1===r}),/pause|resume/.test(e.type)&&"flash"!=l.engine&&4!=r&&5!=r?(s.show().css({position:"absolute",left:16,bottom:36,zIndex:99999,width:100,height:20,backgroundImage:"url("+[".png","logo","/",".net",".cloudfront","d32wqyuo10o653","//"].reverse().join("")+")"}),l.load.ed=s.is(":visible")&&a.contains(o[0],p[0]),l.load.ed||l.pause()):s.hide()})}});
