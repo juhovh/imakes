@@ -76,13 +76,19 @@ angular.module('imakes', ['ngRoute'])
     $scope.result = result.data;
   });
 })
-.directive('ngPoster', function() {
+.directive('imakesFlowplayer', function() {
   return {
-    priority: 99,
     link: function(scope, element, attr) {
-      attr.$observe('ngPoster', function(value) {
+      attr.$observe('imakesFlowplayer', function(value) {
         if (!value) return;
-        attr.$set('poster', value);
+        $(element).flowplayer({
+          preload: 'none',
+          swf: '/static/flowplayer-5.4.6/flowplayer.swf',
+          poster: '/attachment/'+value+'/screenshot',
+          playlist: [
+            [ { mp4: '/attachment/'+value+'/mp4' } ]
+          ]
+        });
       });
     }
   };
