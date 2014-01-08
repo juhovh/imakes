@@ -6,7 +6,9 @@
     <button type="button" ng-class="{ btn: true, 'btn-primary': true, 'btn-sm': true, 'btn-favorite': true, active: message.favorite }">Like</button>
   </h6>
   <div class="image" ng-repeat="image in message.images">
-    <a href="/attachment/{{image.id}}/large"><img class="img-responsive" ng-src="{{image.src}}"></a>
+    <a href="/attachment/{{image.id}}/large">
+      <img class="img-responsive" width="{{image.types.medium.width}}" height="{{image.types.medium.height}}" ng-src="/attachment/{{image.id}}/medium">
+    </a>
   </div>
   <div class="video" ng-repeat="video in message.videos">
     <div imakes-flowplayer="{{video.id}}">
