@@ -53,14 +53,13 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap'])
       params.order_by = 'id_desc';
       promise = messageSearch.searchImages(params);
     } else if (/^\/videos/.test(url)) {
-      params.limit = 10;
       params.order_by = 'id_desc';
       promise = messageSearch.searchVideos(params);
     } else if (/^\/mymessages/.test(url)) {
       params.order_by = 'favorited_desc,id_desc';
       promise = messageSearch.searchMessages($scope.userid, params);
     } else if (/^\/favorites/.test(url)) {
-      promise = messageSearch.searchFavorites($scope.userid);
+      promise = messageSearch.searchFavorites($scope.userid, params);
     } else if (/^\/popular/.test(url)) {
       params.order_by = 'favorited_desc,id_desc';
       promise = messageSearch.searchFavorites(params);
