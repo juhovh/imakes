@@ -1,4 +1,4 @@
-angular.module('imakes', ['ngRoute'])
+angular.module('imakes', ['ngRoute', 'ui.bootstrap'])
 
 .run(function($rootScope, $location) {
   $rootScope.userid = user.id;
@@ -44,46 +44,64 @@ angular.module('imakes', ['ngRoute'])
 })
 
 .controller('MessageListCtrl', function($scope, $location, $routeParams, messageSearch) {
-  var promise;
-  var params = {limit: 20};
-  if (/^\/images/.test($location.url())) {
-    params.order_by = 'id_desc';
-    promise = messageSearch.searchImages(params);
-  } else if (/^\/videos/.test($location.url())) {
-    params.limit = 10;
-    params.order_by = 'id_desc';
-    promise = messageSearch.searchVideos(params);
-  } else if (/^\/mymessages/.test($location.url())) {
-    params.order_by = 'favorited_desc,id_desc';
-    promise = messageSearch.searchMessages($scope.userid, params);
-  } else if (/^\/favorites/.test($location.url())) {
-    promise = messageSearch.searchFavorites($scope.userid);
-  } else if (/^\/popular/.test($location.url())) {
-    params.order_by = 'favorited_desc,id_desc';
-    promise = messageSearch.searchFavorites(params);
+  function getSearchPromise(url, page) {
+    page = page || 1;
+
+    var promise;
+    var params = {limit: 20, offset: (page-1)*20};
+    if (/^\/images/.test(url)) {
+      params.order_by = 'id_desc';
+      promise = messageSearch.searchImages(params);
+    } else if (/^\/videos/.test(url)) {
+      params.limit = 10;
+      params.order_by = 'id_desc';
+      promise = messageSearch.searchVideos(params);
+    } else if (/^\/mymessages/.test(url)) {
+      params.order_by = 'favorited_desc,id_desc';
+      promise = messageSearch.searchMessages($scope.userid, params);
+    } else if (/^\/favorites/.test(url)) {
+      promise = messageSearch.searchFavorites($scope.userid);
+    } else if (/^\/popular/.test(url)) {
+      params.order_by = 'favorited_desc,id_desc';
+      promise = messageSearch.searchFavorites(params);
+    }
+    return promise;
   }
-  if (promise) promise.then(function(result) {
-    angular.forEach(result.data.messages, function(message) {
-      var ts = new Date(message.timestamp);
-      message.date = ts.getDate()+'.'+(ts.getMonth()+1)+'.'+ts.getFullYear();
-      message.time = (ts.getHours()<10?'0':'')+ts.getHours()
-                   + '.'
-                   + (ts.getMinutes()<10?'0':'')+ts.getMinutes();
-      if (message.owner && message.owner.name) {
-        message.author = message.owner.name;
-      }
-      angular.forEach(message.favorited, function(user) {
-        if (user.id === $scope.userid) message.favorite = true;
+  function processSearchPromise(promise) {
+    promise.then(function(result) {
+      angular.forEach(result.data.messages, function(message) {
+        var ts = new Date(message.timestamp);
+        message.date = ts.getDate()+'.'+(ts.getMonth()+1)+'.'+ts.getFullYear();
+        message.time = (ts.getHours()<10?'0':'')+ts.getHours()
+                     + '.'
+                     + (ts.getMinutes()<10?'0':'')+ts.getMinutes();
+        if (message.owner && message.owner.name) {
+          message.author = message.owner.name;
+        }
+        angular.forEach(message.favorited, function(user) {
+          if (user.id === $scope.userid) message.favorite = true;
+        });
+        angular.forEach(message.images, function(image) {
+          image.src = '/attachment/'+image.id+'/medium';
+        });
+        angular.forEach(message.videos, function(video) {
+          video.src = '/attachment/'+video.id+'/mp4';
+        });
       });
-      angular.forEach(message.images, function(image) {
-        image.src = '/attachment/'+image.id+'/medium';
-      });
-      angular.forEach(message.videos, function(video) {
-        video.src = '/attachment/'+video.id+'/mp4';
-      });
+      $scope.result = result.data;
+      $scope.totalItems = result.data.totalMessages;
     });
-    $scope.result = result.data;
+  }
+  processSearchPromise(getSearchPromise($location.url()));
+
+  $scope.currentPage = 1;
+  $scope.$watch('currentPage', function() {
+    var promise = getSearchPromise($location.url(), $scope.currentPage);
+    processSearchPromise(promise);
+    console.log(promise);
   });
+  $scope.itemsPerPage = 20;
+  $scope.maxSize = 5;
 })
 .directive('imakesFlowplayer', function() {
   return {
