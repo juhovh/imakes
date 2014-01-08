@@ -1,11 +1,13 @@
 angular.module('imakes', ['ngRoute', 'ui.bootstrap'])
 
-.run(function($rootScope, $location) {
+.run(function($rootScope, $location, $http, $templateCache) {
   $rootScope.userid = user.id;
   $rootScope.username = user.name;
   $rootScope.isActive = function(url) {
     return new RegExp("^"+url).test($location.url());
   };
+  $http.get('messagelist.html', {cache: $templateCache});
+  $http.get('message.html', {cache: $templateCache});
 })
 
 .factory('messageSearch', function($http) {
