@@ -170,12 +170,21 @@ exports.populateMessage = function(message, callback) {
         if (err) return callback(err);
         rows.forEach(function(row) {
           if (row.metadata) row.metadata = JSON.parse(row.metadata);
+          function convertTypeArrayToObject(types) {
+            var keys = _.pluck(types, 'name');
+            var values = _.map(types, function(type) {
+              return _.omit(type, 'name');
+            });
+            return _.object(keys, values);
+          }
           if (/^image$/.test(row.filetype)) {
-            row.types = filedb.getImageTypes(row.width, row.height);
+            var types = filedb.getImageTypes(row.width, row.height);
+            row.types = convertTypeArrayToObject(types);
             message.images.push(row);
           }
           if (/^video$/.test(row.filetype)) {
-            row.types = filedb.getVideoTypes(row.width, row.height);
+            var types = filedb.getVideoTypes(row.width, row.height);
+            row.types = convertTypeArrayToObject(types);
             message.videos.push(row);
           }
         });
