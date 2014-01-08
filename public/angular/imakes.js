@@ -81,12 +81,6 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap'])
         angular.forEach(message.favorited, function(user) {
           if (user.id === $scope.userid) message.favorite = true;
         });
-        angular.forEach(message.images, function(image) {
-          image.src = '/attachment/'+image.id+'/medium';
-        });
-        angular.forEach(message.videos, function(video) {
-          video.src = '/attachment/'+video.id+'/mp4';
-        });
       });
       $scope.result = result.data;
       $scope.totalItems = result.data.totalMessages;
