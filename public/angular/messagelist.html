@@ -1,4 +1,6 @@
-<pagination total-items="result.totalMessages" items-per-page="itemsPerPage" page="currentPage" max-size="5" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+<div ng-if="result">
+  <pagination total-items="result.totalMessages" items-per-page="itemsPerPage" page="currentPage" max-size="5" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+</div>
 <div ng-repeat="message in result.messages">
   <div ng-include="'message.html'"></div>
   <hr ng-if="!$last">
