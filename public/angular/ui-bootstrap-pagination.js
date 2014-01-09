@@ -40,6 +40,7 @@ angular.module('ui.bootstrap.pagination', [])
     if (this.page > 0 && this.page <= $scope.totalPages) {
       $scope.pages = this.getPages(this.page, $scope.totalPages);
     }
+    $scope.hidden = !$scope.totalItems;
   };
 
   $scope.selectPage = function(page) {

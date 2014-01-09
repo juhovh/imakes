@@ -84,7 +84,6 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap.pagination'])
         });
       });
       $scope.result = result.data;
-      $scope.totalItems = result.data.totalMessages;
     });
   }
   processSearchPromise(getSearchPromise($location.url()));
