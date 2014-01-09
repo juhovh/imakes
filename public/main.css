@@ -23,12 +23,14 @@ footer {
   background-color: black;
 }
 
-.pagination {
-  width: 100%;
-}
-
 .pagination .glyphicon {
   margin: 0 -2px;
+}
+
+/* Hack around bootstrap for pagination */
+ul.pagination li.hidden-xs {display:inline !important;}
+@media (max-width: 768px) { 
+    ul.pagination li.hidden-xs {display:none !important;}
 }
 
 #map {
