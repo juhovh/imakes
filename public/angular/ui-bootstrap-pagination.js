@@ -94,7 +94,7 @@ angular.module('ui.bootstrap.pagination', [])
     link: function(scope, element, attrs, paginationCtrl) {
 
       // Setup configuration parameters
-      var maxSize,
+      var maxSize, maxSizeMobile,
       boundaryLinks  = paginationCtrl.getAttributeValue(attrs.boundaryLinks,  config.boundaryLinks      ),
       directionLinks = paginationCtrl.getAttributeValue(attrs.directionLinks, config.directionLinks     ),
       firstClass      = paginationCtrl.getAttributeValue(attrs.firstClass,    config.firstClass,     true),
@@ -111,15 +111,22 @@ angular.module('ui.bootstrap.pagination', [])
           paginationCtrl.render();
         });
       }
+      if (attrs.maxSizeMobile) {
+        scope.$parent.$watch($parse(attrs.maxSizeMobile), function(value) {
+          maxSizeMobile = parseInt(value, 10);
+          paginationCtrl.render();
+        });
+      }
 
       // Create page object used in template
-      function makePage(number, style, text, isActive, isDisabled) {
+      function makePage(number, style, text, isActive, isDisabled, hideMobile) {
         return {
           number: number,
           style: style,
           text: text,
           active: isActive,
-          disabled: isDisabled
+          disabled: isDisabled,
+          mobileHidden: hideMobile
         };
       }
 
@@ -151,9 +158,35 @@ angular.module('ui.bootstrap.pagination', [])
           }
         }
 
+        // Default page limits
+        var startPageMobile = 1, endPageMobile = totalPages;
+        var isMaxSizedMobile = ( angular.isDefined(maxSizeMobile) && maxSizeMobile < totalPages );
+
+        // recompute if maxSizeMobile
+        if ( isMaxSizedMobile ) {
+          if ( rotate ) {
+            // Current page is displayed in the middle of the visible ones
+            startPageMobile = Math.max(currentPage - Math.floor(maxSizeMobile/2), 1);
+            endPageMobile   = startPageMobile + maxSizeMobile - 1;
+
+            // Adjust if limit is exceeded
+            if (endPageMobile > totalPages) {
+              endPageMobile   = totalPages;
+              startPageMobile = endPageMobile - maxSizeMobile + 1;
+            }
+          } else {
+            // Visible pages are paginated with maxSize
+            startPageMobile = ((Math.ceil(currentPage / maxSizeMobile) - 1) * maxSizeMobile) + 1;
+
+            // Adjust last page if limit is exceeded
+            endPageMobile = Math.min(startPage + maxSizeMobile - 1, totalPages);
+          }
+        }
+
         // Add page number links
         for (var number = startPage; number <= endPage; number++) {
-          var page = makePage(number, '', number, paginationCtrl.isActive(number), false);
+          var hideMobile = number < startPageMobile || number > endPageMobile;
+          var page = makePage(number, '', number, paginationCtrl.isActive(number), false, hideMobile);
           pages.push(page);
         }
 

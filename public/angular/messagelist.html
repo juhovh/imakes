@@ -1,5 +1,12 @@
-<pagination total-items="result.totalMessages" items-per-page="itemsPerPage" page="currentPage" max-size="5" boundary-links="true"></pagination>
+<div class="text-center">
+  <pagination total-items="result.totalMessages" items-per-page="itemsPerPage" page="currentPage" max-size="5" max-size-mobile="3" boundary-links="true"></pagination>
+</div>
+
 <div ng-repeat="message in result.messages">
   <div ng-include="'message.html'"></div>
   <hr ng-if="!$last">
+</div>
+
+<div class="text-center">
+  <pagination total-items="result.totalMessages" items-per-page="itemsPerPage" page="currentPage" max-size="5" max-size-mobile="3" boundary-links="true"></pagination>
 </div>
