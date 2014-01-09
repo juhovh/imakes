@@ -92,6 +92,7 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap.pagination'])
   $scope.$watch('currentPage', function() {
     var promise = getSearchPromise($location.url(), $scope.currentPage);
     processSearchPromise(promise);
+    if ($scope.result) delete $scope.result.messages;
   });
   $scope.itemsPerPage = 20;
   $scope.maxSize = 5;
