@@ -89,7 +89,7 @@ angular.module('ui.bootstrap.pagination', [])
       onSelectPage:' &'
     },
     controller: 'PaginationController',
-    templateUrl: 'pagination.html',
+    templateUrl: 'template/pagination.html',
     replace: true,
     link: function(scope, element, attrs, paginationCtrl) {
 

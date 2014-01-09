@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="imakes">
+  <head>
+    <meta charset="utf-8">
+    <title>Imakes</title>
+
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Imakes ATOM Feed">
+
+    <link rel="stylesheet" href="lib/bootstrap-3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap-3.0.3/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="lib/flowplayer-5.4.6-hotfix/skin/minimalist.css">
+    <link rel="stylesheet" href="lib/leaflet-0.7.1/leaflet.css" />
+    <link rel="stylesheet" href="lib/awesome-markers-2.0.1/leaflet.awesome-markers.css">
+    <link rel="stylesheet" href="lib/markercluster-0.4/MarkerCluster.css">
+    <link rel="stylesheet" href="lib/markercluster-0.4/MarkerCluster.Default.css">
+
+    <link rel="stylesheet" href="/static/main.css">
+  </head>
+  <body>
+    <div ng-include="'template/navbar.html'"></div>
+    <div class="container" ng-view></div>
+
+    <script src="lib/jquery-1.10.2.min.js"></script>
+    <script src="lib/bootstrap-3.0.3/js/bootstrap.min.js"></script>
+    <script src="lib/flowplayer-5.4.6-hotfix/flowplayer.min.js"></script>
+    <script src="lib/leaflet-0.7.1/leaflet.js"></script>
+    <script src="lib/awesome-markers-2.0.1/leaflet.awesome-markers.min.js"></script>
+    <script src="lib/markercluster-0.4/leaflet.markercluster.js"></script>
+    <script src="lib/Chart.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+    <script src="ui-bootstrap-pagination.js"></script>
+
+    <script src="/api/user.js"></script>
+    <script src="imakes.js"></script>
+  </body>
+</html>
