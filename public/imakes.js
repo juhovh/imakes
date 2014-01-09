@@ -6,8 +6,8 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap.pagination'])
   $rootScope.isActive = function(url) {
     return new RegExp("^"+url).test($location.url());
   };
-  $http.get('messagelist.html', {cache: $templateCache});
-  $http.get('message.html', {cache: $templateCache});
+  $http.get('template/messagelist.html', {cache: $templateCache});
+  $http.get('template/message.html', {cache: $templateCache});
 })
 
 .factory('messageSearch', function($http) {
@@ -32,7 +32,7 @@ angular.module('imakes', ['ngRoute', 'ui.bootstrap.pagination'])
 .config(function($routeProvider) {
   var messageListRoute = {
     controller: 'MessageListCtrl',
-    templateUrl: 'messagelist.html',
+    templateUrl: 'template/messagelist.html',
   };
   $routeProvider
     .when('/images', messageListRoute)
