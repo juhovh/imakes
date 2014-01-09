@@ -1,4 +1,4 @@
-angular.module('imakes', ['ngRoute', 'ui.bootstrap'])
+angular.module('imakes', ['ngRoute', 'ui.bootstrap.pagination'])
 
 .run(function($rootScope, $location, $http, $templateCache) {
   $rootScope.userid = user.id;
