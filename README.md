@@ -164,3 +164,10 @@ corresponding result. The totalMessages field contains the number of messages in
 `limit` parameters would have been given. This is useful for example if one wants to implement
 paging and know the number of total pages. The messages array finally contains the resulting
 messages with the requested ordering.
+
+License
+-------
+
+The project is licensed under [LGPLv2.1][1]
+
+[1]: http://www.gnu.org/licenses/lgpl-2.1.html
