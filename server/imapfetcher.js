@@ -205,11 +205,12 @@ var ImapFetcher = (function() {
 
       if (err) return cb(err);
       imap.openBox('INBOX', function(err, box) {
-        if (err) throw err;
+        if (err) return cb(err);
 
         self.newMessages = false;
         var starttime = new Date();
         winston.debug('Starting to fetch new messages starting from UID %d', (lastuid+1));
+        var error = null;
         var f = imap.fetch((lastuid+1)+':*', { struct: true });
         f.on('message', function(msg, seqno) {
           self.processMsg(msg, function(message) {
@@ -221,16 +222,16 @@ var ImapFetcher = (function() {
         });
         f.once('error', function(err) {
           winston.error('Fetch error: ' + err);
-          if (cb) cb(err);
+          error = err;
         });
-        f.once('end', function() {
+        f.once('close', function(had_err) {
           var time = Math.round((new Date()-starttime)/100)/10;
           if (messages.length === 0) {
             winston.debug('Found 0 new messages, fetching took %d seconds', time);
           } else {
             winston.info('Found %d new messages, fetching took %d seconds', messages.length, time);
           }
-          if (cb) cb(null, messages);
+          if (cb) cb(error, messages);
         });
       });
     });
