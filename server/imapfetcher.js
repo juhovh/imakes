@@ -155,8 +155,14 @@ var ImapFetcher = (function() {
       if (cb) cb();
       return;
     }
-    if (cb) imap.once('error', cb);
-    if (cb) imap.once('ready', cb);
+    imap.once('error', function(err) {
+      imap.removeAllListeners('ready');
+      cb(err);
+    });
+    imap.once('ready', function() {
+      imap.removeAllListeners('error');
+      cb();
+    });
     if (state === 'disconnected') {
       imap.connect();
     }
