@@ -28,6 +28,10 @@ footer {
 }
 
 /* Hack around bootstrap for pagination */
+ul.pagination li.visible-xs {display:none !important;}
+@media (max-width: 768px) { 
+    ul.pagination li.visible-xs {display:inline !important;}
+}
 ul.pagination li.hidden-xs {display:inline !important;}
 @media (max-width: 768px) { 
     ul.pagination li.hidden-xs {display:none !important;}
