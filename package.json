@@ -39,14 +39,16 @@
     "moment": "2.5.1",
     "xmlbuilder": "2.2.1",
 
-    "react": "0.10.0"
+    "react": "0.10.0",
+    "react-async": "0.7.0",
+    "react-router-component": "0.15.0"
   },
   "devDependencies": {
     "browserify": "3.33.0",
     "envify": "1.2.1",
     "reactify": "0.10.0",
     "statics": "0.1.0",
-    "uglifyjs": "2.3.6",
+    "uglify-js": "2.4.13",
     "watchify": "0.6.3"
   },
   "scripts": {
