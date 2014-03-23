@@ -1,7 +1,9 @@
+browser-bundle.js
 config.js
 imakes.db
 files/
 
+npm-debug.log
 node_modules/
 .DS_Store
 *.swp
