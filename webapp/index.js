@@ -15,6 +15,9 @@ var App = React.createClass({
         <Location path="/static/" handler={pages.ImagesPage} />
         <Location path="/images" handler={pages.ImagesPage} />
         <Location path="/videos" handler={pages.VideosPage} />
+        <Location path="/mymessages" handler={pages.MyMessagesPage} />
+        <Location path="/favorites" handler={pages.FavoritesPage} />
+        <Location path="/popular" handler={pages.PopularPage} />
         <NotFound handler={pages.NotFoundPage} />
       </Locations>
     );
