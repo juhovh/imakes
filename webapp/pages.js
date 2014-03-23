@@ -4,6 +4,7 @@ var React = require('react');
 var Link = require('react-router-component').Link
 
 var Navbar = require('./navbar')
+var MessageList = require('./messagelist');
 
 exports.ImagesPage = React.createClass({
   render: function() {
@@ -11,6 +12,7 @@ exports.ImagesPage = React.createClass({
       <div>
         <Navbar active="images" username="testuser" />
         <p>Images page</p>
+        <MessageList baseurl="/api/search/images" />
       </div>
     );
   }
@@ -22,6 +24,7 @@ exports.VideosPage = React.createClass({
       <div>
         <Navbar active="videos" username="testuser" />
         <p>Videos page</p>
+        <MessageList baseurl="/api/search/videos" />
       </div>
     );
   }

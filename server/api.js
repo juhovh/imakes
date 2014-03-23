@@ -64,6 +64,10 @@ exports.setup = function(config, app) {
     }
   }
 
+  app.get('/api/user', authenticate, function(req, res, next) {
+    res.send(filterUser(req.user));
+  });
+
   app.get('/api/user.js', authenticate, function(req, res, next) {
     var userjson = JSON.stringify(filterUser(req.user));
     var response = 'var user = JSON.parse("'

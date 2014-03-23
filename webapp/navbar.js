@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Link = require('react-router-component').Link
+var Link = require('react-router-component').Link;
 
 module.exports = React.createClass({
   render: function() {
@@ -12,7 +12,7 @@ module.exports = React.createClass({
     var popularClasses = this.props.active === 'popular' ? 'active' : '';
     return (
       <div className="navbar navbar-inverse navbar-static-top" role="navigation">
-        <div className="container-fluid">
+        <div className="container">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
               <span className="sr-only">Toggle navigation</span>
@@ -32,7 +32,7 @@ module.exports = React.createClass({
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="dropdown">
-                <a className="dropdown-toggle" data-toggle="dropdown">{this.props.username} <b class="caret"></b></a>
+                <a className="dropdown-toggle" data-toggle="dropdown">{this.props.username} <b className="caret"></b></a>
                 <ul className="dropdown-menu">
                   <li><a href="/logout">Logout</a></li>
                 </ul>
