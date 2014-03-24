@@ -11,7 +11,6 @@ exports.ImagesPage = React.createClass({
     return (
       <div>
         <Navbar active="images" username="testuser" />
-        <p>Images page</p>
         <MessageList baseurl="/api/search/images" />
       </div>
     );
@@ -23,7 +22,6 @@ exports.VideosPage = React.createClass({
     return (
       <div>
         <Navbar active="videos" username="testuser" />
-        <p>Videos page</p>
         <MessageList baseurl="/api/search/videos" />
       </div>
     );
@@ -35,7 +33,6 @@ exports.MyMessagesPage = React.createClass({
     return (
       <div>
         <Navbar active="mymessages" username="testuser" />
-        <p>My Messages page</p>
       </div>
     );
   }
@@ -46,7 +43,6 @@ exports.FavoritesPage = React.createClass({
     return (
       <div>
         <Navbar active="favorites" username="testuser" />
-        <p>My Favorites page</p>
       </div>
     );
   }
@@ -57,7 +53,6 @@ exports.PopularPage = React.createClass({
     return (
       <div>
         <Navbar active="popular" username="testuser" />
-        <p>Popular page</p>
       </div>
     );
   }

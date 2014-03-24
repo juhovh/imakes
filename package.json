@@ -2,6 +2,13 @@
   "name": "imakes",
   "version": "0.1.0",
   "description": "Imakes image file server",
+  "main": "./server.js",
+  "browser": "./client.js",
+  "browserify": {
+    "transform": [
+      ["reactify", {"harmony": true}]
+    ]
+  },
   "maintainers": [
     {
       "name": "Juho Vähä-Herttua",
@@ -41,26 +48,24 @@
 
     "react": "0.10.0",
     "react-async": "0.7.0",
-    "react-router-component": "0.15.0"
+    "react-router-component": "0.15.0",
+    "node-jsx": "0.9.0",
+    "superagent": "0.17.0",
+    "fibers": "1.0.1"
   },
   "devDependencies": {
-    "browserify": "3.33.0",
-    "envify": "1.2.1",
     "reactify": "0.10.0",
-    "statics": "0.1.0",
+    "envify": "1.2.1",
+    "browserify": "3.33.0",
+    "connect-browserify": "2.0.0",
     "uglify-js": "2.4.13",
-    "watchify": "0.6.3"
+    "supervisor": "0.5.7"
   },
   "scripts": {
-    "start": "STATIC_ROOT=./static watchify -o public/browser-bundle.js -v -d webapp/",
-    "build": "STATIC_ROOT=./static NODE_ENV=production browserify webapp/ | uglifyjs -cm > public/browser-bundle.min.js",
-    "collect-static": "collect-static . ./static",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify"
-    ]
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "supervisor -i node_modules server.js",
+    "build": "NODE_ENV=production browserify ./ | uglifyjs -cm 2>/dev/null > ./assets/bundle.js",
+    "start-prod": "NODE_ENV=production node server.js",
+    "clean": "rm -f ./assets/bundle.js"
   }
 }

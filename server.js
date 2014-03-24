@@ -7,10 +7,8 @@ var filedb = require('./server/filedb');
 var fetcher = require('./server/fetcher')(config.imap);
 
 var app = require('./server/app');
-var public = require('./server/public');
-var private = require('./server/private');
 var api = require('./server/api');
-var admin = require('./server/admin');
+var render = require('./server/render');
 
 function backgroundTask() {
   fetcher(function(err, hasmore) {
@@ -24,10 +22,8 @@ function backgroundTask() {
 }
 
 var server = app(config);
-public.setup(config, server);
-private.setup(config, server);
 api.setup(config, server);
-admin.setup(config, server);
+render.setup(config, server);
 
 db.prepare(function(err) {
   if (err) winston.error('Preparing database error: '+err);
