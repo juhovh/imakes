@@ -11,7 +11,7 @@ module.exports = React.createClass({
 
   getInitialStateAsync: function(cb) {
     superagent.get(
-      'http://localhost:3000'+this.props.baseurl+'?limit=20&order_by=id_desc',
+      'http://localhost:3000'+this.props.baseurl+'&limit=20',
       function(err, res) {
         cb(err, res ? res.body : null);
       });

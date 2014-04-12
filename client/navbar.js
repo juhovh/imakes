@@ -10,6 +10,7 @@ module.exports = React.createClass({
     var mymessagesClasses = this.props.active === 'mymessages' ? 'active' : '';
     var favoritesClasses = this.props.active === 'favorites' ? 'active' : '';
     var popularClasses = this.props.active === 'popular' ? 'active' : '';
+    var mapClasses = this.props.active === 'map' ? 'active' : '';
     return (
       <div className="navbar navbar-inverse navbar-static-top" role="navigation">
         <div className="container">
@@ -29,6 +30,7 @@ module.exports = React.createClass({
               <li className={mymessagesClasses}><Link href="/mymessages">My Messages</Link></li>
               <li className={favoritesClasses}><Link href="/favorites">My Favorites</Link></li>
               <li className={popularClasses}><Link href="/popular">Popular</Link></li>
+              <li className={mapClasses}><Link href="/map">Map</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="dropdown">

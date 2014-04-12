@@ -6,57 +6,48 @@ var Link = require('react-router-component').Link
 var Navbar = require('./navbar')
 var MessageList = require('./messagelist');
 
-exports.ImagesPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Navbar active="images" username="testuser" />
-        <MessageList baseurl="/api/search/images" />
-      </div>
-    );
-  }
-});
+createPage = function(name, content) {
+  return React.createClass({
+    render: function() {
+      return (
+        <div>
+          <Navbar active={name} username="testuser" />
+          {content}
+        </div>
+      );
+    }
+  });
+}
 
-exports.VideosPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Navbar active="videos" username="testuser" />
-        <MessageList baseurl="/api/search/videos" />
-      </div>
-    );
-  }
-});
+exports.ImagesPage = createPage(
+  'images',
+  <MessageList baseurl="/api/search/images?order_by=id_desc" />
+);
 
-exports.MyMessagesPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Navbar active="mymessages" username="testuser" />
-      </div>
-    );
-  }
-});
+exports.VideosPage = createPage(
+  'videos',
+  <MessageList baseurl="/api/search/videos?order_by=id_desc" />
+);
 
-exports.FavoritesPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Navbar active="favorites" username="testuser" />
-      </div>
-    );
-  }
-});
+exports.MyMessagesPage = createPage(
+  'mymessages',
+  ''
+);
 
-exports.PopularPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Navbar active="popular" username="testuser" />
-      </div>
-    );
-  }
-});
+exports.FavoritesPage = createPage(
+  'favorites',
+  ''
+);
+
+exports.PopularPage = createPage(
+  'popular',
+  <MessageList baseurl="/api/search/favorites?order_by=favorited_desc,id_desc" />
+);
+
+exports.MapPage = createPage(
+  'map',
+  ''
+);
 
 exports.NotFoundPage = React.createClass({
   render: function() {

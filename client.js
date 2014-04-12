@@ -56,6 +56,7 @@ var App = React.createClass({
           <Page path="/mymessages" handler={pages.MyMessagesPage} />
           <Page path="/favorites" handler={pages.FavoritesPage} />
           <Page path="/popular" handler={pages.PopularPage} />
+          <Page path="/map" handler={pages.MapPage} />
           <NotFound handler={pages.NotFoundPage} />
         </Pages>
       </html>
