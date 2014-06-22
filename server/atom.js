@@ -8,7 +8,7 @@ exports.generate = function(callback) {
   db.listMessages({ limit: 100, order_by: 'message.id DESC' }, function(err, result) {
     if (err) return callback(err);
  
-    var feed = xmlbuilder.create('feed', {'version': '1.0', 'encoding': 'utf-8'});
+    var feed = xmlbuilder.create('feed', {'version': '1.0', 'encoding': 'utf-8'}, null, {allowSurrogateChars: true});
     feed.att('xmlns', 'http://www.w3.org/2005/Atom')
         .ele('id').txt('urn:uuid:d2a022a1-5d24-45f9-af20-479e7b093770').up()
         .ele('title').txt('Imakes 3.0').up()
