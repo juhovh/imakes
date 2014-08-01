@@ -46,7 +46,8 @@ exports.setup = function(config, app) {
     function gpsPredicate(attachment) {
       return attachment.metadata &&
              (attachment.metadata['GPSPosition'] ||
-              attachment.metadata['GPSCoordinates']);
+              attachment.metadata['GPSCoordinates'] ||
+              attachment.metadata['GPSCoordinates-fin']);
     }
     if (message.images.some(gpsPredicate) || message.videos.some(gpsPredicate)) {
       message.maplink = true;
