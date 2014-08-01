@@ -11,6 +11,7 @@
     <h6>
       Liked by {{ message.favorited.length }} people
       <button type="button" class="btn btn-primary btn-sm btn-favorite{% if message.favorite %} active{% endif %}" data-url="/api/user/{{ user.id }}/favorite/{{ message.id }}">{% if message.favorite %}Unlike{% else %}Like{% endif %}</button>
+      {% if message.maplink %}<a href="/map/{{ message.id }}">Show location on map</a>{% endif %}
     </h6>
     {% for image in message.images %}
     <div class="image">

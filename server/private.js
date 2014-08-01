@@ -42,6 +42,15 @@ exports.setup = function(config, app) {
       });
       message.favorite = (user != null);
     }
+
+    function gpsPredicate(attachment) {
+      return attachment.metadata &&
+             (attachment.metadata['GPSPosition'] ||
+              attachment.metadata['GPSCoordinates']);
+    }
+    if (message.images.some(gpsPredicate) || message.videos.some(gpsPredicate)) {
+      message.maplink = true;
+    }
   }
 
   app.get('/user.js', authenticate, function(req, res, next) {
@@ -208,6 +217,15 @@ exports.setup = function(config, app) {
       url: '/map',
       user: req.user,
       username: format.user(req.user)
+    });
+  });
+
+  app.get('/map/:id', authenticate, function(req, res, next) {
+    res.render('map', {
+      url: req.url,
+      user: req.user,
+      username: format.user(req.user),
+      messageid: req.params.id
     });
   });
 

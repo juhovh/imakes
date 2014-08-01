@@ -78,30 +78,42 @@ function getVideoCoordinate(metadata) {
     || metadata['GPSCoordinates-fin'];
 }
 
+function addMessageMarkers(msg) {
+  var author = _.isObject(msg.owner) ? msg.owner.name : formatAuthor(msg.author);
+  _.each(msg.images, function(img) {
+    if (!img.metadata || !img.metadata.GPSPosition) return;
+
+    var position = img.metadata.GPSPosition;
+    var coordinate = parseCoordinate(position);
+    var datetime = convertDateTime(img.metadata.DateTimeOriginal);
+    addMarker('camera', coordinate, msg.id, msg.title, author, img.id, datetime)
+  });
+  _.each(msg.videos, function(video) {
+    if (!video.metadata || !getVideoCoordinate(video.metadata)) return;
+
+    var position = getVideoCoordinate(video.metadata);
+    var coordinate = parseCoordinate(position);
+    var datetime = convertDateTime(video.metadata.CreateDate);
+    if (coordinate) {
+      addMarker('film', coordinate, msg.id, msg.title, author, null, datetime)
+    }
+  });
+}
+
+{% if messageid %}
+$.getJSON('/api/message/{{ messageid }}', function(msg) {
+  addMessageMarkers(msg);
+  map.addLayer(markers);
+  map.fitBounds(markers.getBounds(), { maxZoom: 14 });
+});
+{% else %}
 $.getJSON('/api/search/messages?metadata_contains=GPSPosition|GPSCoordinates|GPSCoordinates-fin', function(data) {
   _.each(data.messages, function(msg) {
-    var author = _.isObject(msg.owner) ? msg.owner.name : formatAuthor(msg.author);
-    _.each(msg.images, function(img) {
-      if (!img.metadata || !img.metadata.GPSPosition) return;
-
-      var position = img.metadata.GPSPosition;
-      var coordinate = parseCoordinate(position);
-      var datetime = convertDateTime(img.metadata.DateTimeOriginal);
-      addMarker('camera', coordinate, msg.id, msg.title, author, img.id, datetime)
-    });
-    _.each(msg.videos, function(video) {
-      if (!video.metadata || !getVideoCoordinate(video.metadata)) return;
-
-      var position = getVideoCoordinate(video.metadata);
-      var coordinate = parseCoordinate(position);
-      var datetime = convertDateTime(video.metadata.CreateDate);
-      if (coordinate) {
-        addMarker('film', coordinate, msg.id, msg.title, author, null, datetime)
-      }
-    });
+    addMessageMarkers(msg);
   });
   map.addLayer(markers);
 });
+{% endif %}
 
 </script>
 {% endblock %}
