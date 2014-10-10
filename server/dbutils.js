@@ -164,7 +164,7 @@ exports.populateMessage = function(message, callback) {
   message.videos = [];
   async.parallel([
     function(callback) {
-      var query = 'SELECT * FROM attachment WHERE message_id = ?';
+      var query = 'SELECT * FROM attachment WHERE deleted = 0 AND message_id = ?';
       var params = [message.id];
       db.all(query, params, function(err, rows) {
         if (err) return callback(err);
