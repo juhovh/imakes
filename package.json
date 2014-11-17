@@ -30,7 +30,7 @@
     "mkdirp": "0.5.0",
     "gm": "1.17.0",
     "avconv": "2.0.0",
-    "express": "4.10.2",
+    "express": "3.18.3",
     "passport": "0.2.1",
     "passport-google": "0.3.0",
     "passport-github": "0.1.5",
