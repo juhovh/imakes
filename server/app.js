@@ -1,4 +1,9 @@
 var express = require('express');
+var compression = require('compression');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
+
 var cons = require('consolidate');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google').Strategy;
@@ -8,20 +13,19 @@ var db = require('./db');
 
 module.exports = function(config) {
   var app = express();
-
-  app.configure(function() {
-    app.use(express.compress());
-    app.use(express.urlencoded());
-    app.use(express.json());
-    app.use(express.cookieParser());
-    app.use(express.cookieSession({
-      secret: config.secret,
-      cookie: { maxAge: config.sessionDuration }
-    }));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use('/static', express.static(config.staticPath));
-  });
+  app.use(compression());
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  app.use(bodyParser.json());
+  app.use(cookieParser());
+  app.use(cookieSession({
+    secret: config.secret,
+    cookie: { maxAge: config.sessionDuration }
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use('/static', express.static(config.staticPath));
 
   app.enable('strict routing');
   app.engine('html', cons.swig);
