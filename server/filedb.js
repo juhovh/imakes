@@ -267,8 +267,12 @@ function processVideo(video, debug, videocb) {
       mkdirp(outputdir, function(err) {
         if (err) return videocb(err);
         var stream = avconv(params);
-        if (debug) stream.pipe(process.stdout);
-        stream.once('end', function(exitCode, signal) {
+        if (debug) {
+          stream.on('message', function(data) {
+            process.stdout.write(data);
+          });
+        }
+        stream.once('exit', function(exitCode, signal) {
           if (exitCode) encodecb('avconv exit code: ' + exitCode);
 
           // Swap width and height based on EXIF orientation

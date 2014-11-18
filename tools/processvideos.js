@@ -3,7 +3,7 @@ var async = require('async');
 var db = require('../server/db');
 var filedb = require('../server/filedb');
 
-db.listVideos(function(err, result) {
+db.listMessages({ videos: true }, function(err, result) {
   if (err) return console.log(err);
   async.eachSeries(result.messages, function(message, msgcb) {
     async.eachSeries(message.videos, function(video, videocb) {
