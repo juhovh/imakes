@@ -299,7 +299,7 @@ exports.setup = function(config, app) {
     db.getAttachmentPath(req.params.id, function(err, path) {
       if (err) return next(err);
       if (!path) return res.send(404, 'Attachment not found');
-      res.sendfile(path);
+      res.sendFile(path);
     });
   });
 
@@ -307,7 +307,7 @@ exports.setup = function(config, app) {
     db.getAttachmentPath(req.params.id, req.params.type, function(err, path) {
       if (err) return next(err);
       if (!path) return res.send(404, 'Attachment not found');
-      res.sendfile(path);
+      res.sendFile(path);
     });
   });
 };
