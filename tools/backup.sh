@@ -1,6 +1,6 @@
 
 backup_dir="."
-backup_files="config.js imakes.db.bak files"
+backup_files="config.js imakes.db.bak files/images/original files/videos/original"
 backup_dest=".."
 
 date=$(date +%Y-%m-%d)
