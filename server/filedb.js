@@ -50,10 +50,10 @@ var imageSizes = [
     size: 'medium',
     calculate: getResizeFunction(640)
   },{
-    width: 1024,
-    height: 1024,
+    width: 2048,
+    height: 2048,
     size: 'large',
-    calculate: getResizeFunction(1024)
+    calculate: getResizeFunction(2048)
   }
 ];
 
