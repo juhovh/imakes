@@ -18,8 +18,9 @@ module.exports = {
     tlsOptions: { rejectUnauthorized: false }
   },
   google: {
-    returnURL: 'http://<HOSTNAME>/auth/google/return',
-    realm: 'http://<HOSTNAME>/'
+    clientID: '<CLIENTID>',
+    clientSecret: '<SECRET>',
+    callbackURL: 'http://<HOSTNAME>/auth/google/callback'
   },
   github: {
     clientID: '<CLIENTID>',

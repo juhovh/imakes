@@ -6,7 +6,7 @@ var cookieSession = require('cookie-session');
 
 var cons = require('consolidate');
 var passport = require('passport');
-var GoogleStrategy = require('passport-google').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 
 var db = require('./db');
@@ -42,9 +42,9 @@ module.exports = function(config) {
   });
 
   passport.use(new GoogleStrategy(config.google,
-    function(identifier, profile, done) {
-      var email = profile.emails.length && profile.emails[0].value;
-      db.findUserAuth('google', identifier, function(err, user) {
+    function(accessToken, refreshToken, profile, done) {
+      var email = profile.emails && profile.emails.length && profile.emails[0].value;
+      db.findUserAuth('google', profile.id, function(err, user) {
         if (err || !email) return done(err);
 
         if (user) {
@@ -56,10 +56,10 @@ module.exports = function(config) {
         }
 
         // Try to fall back to finding by email, update identifier respectively
-        db.findUserAuth('google', profile.emails[0].value, function(err, user) {
+        db.findUserAuth('google', email, function(err, user) {
           if (err || !user) return done(err, user);
 
-          user.identifier = identifier;
+          user.identifier = profile.id;
           user.username = email;
           user.displayname = profile.displayName;
           user.lastlogin = new Date();
@@ -103,8 +103,8 @@ module.exports = function(config) {
     };
   };
 
-  app.get('/auth/google', passport.authenticate('google'));
-  app.get('/auth/google/return', authenticate('google'));
+  app.get('/auth/google', passport.authenticate('google', { scope: 'email' }));
+  app.get('/auth/google/callback', authenticate('google'));
   app.get('/auth/github', passport.authenticate('github'));
   app.get('/auth/github/callback', authenticate('github'));
 
