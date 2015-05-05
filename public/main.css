@@ -3,6 +3,7 @@ a {
 }
 
 footer {
+  margin-top: 20px;
   padding-top: 30px;
   padding-bottom: 30px;
   background-color: #eee;
@@ -11,6 +12,10 @@ footer {
 .message img {
   border: 1px solid #444;
   display: inline-block;
+}
+
+.message h3 {
+  margin-top: 0;
 }
 
 .message {
