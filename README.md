@@ -63,6 +63,14 @@ cat db/schema.sql | sqlite3 imakes.db
 cat db/users.sql | sqlite3 imakes.db
 ```
 
+### Alternatively restore from backups
+
+```
+tar xzvf imakes.tgz
+mv imakes.db.bak imakes.db
+sqlite3 imakes.db "UPDATE message SET processed = 0"
+```
+
 ### Finally run the server
 
 ```
