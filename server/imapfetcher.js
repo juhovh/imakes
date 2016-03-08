@@ -53,8 +53,10 @@ var ImapFetcher = (function() {
           });
         } else if (struct.length === 1) {
           mimetype = struct[0].type + '/' + struct[0].subtype;
-          if (mimetype === 'application/octet-stream') {
-            winston.debug('Found application/octet-stream, add to binaries for magic test');
+          // What the fuck windows phone, not just octed-stream for images but
+          // audio/mp4 for some video files as well, better to just check magic bytes
+          if (mimetype === 'application/octet-stream' || mimetype === 'audio/mp4') {
+            winston.debug('Found ' + mimetype + ', add to binaries for magic test');
             target = binaries;
           } else if (self.shouldFetchMimetype(mimetype)) {
             target = files;
