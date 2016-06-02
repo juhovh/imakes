@@ -20,7 +20,7 @@ body > .container {
   -ms-flex: 1 0 auto;
   -webkit-box-flex: 1;
   -webkit-flex: 1 0 auto;
-  flex: 1;
+  flex: 1 0 auto;
 }
 
 a {
@@ -65,6 +65,13 @@ ul.pagination li.visible-xs {display:none !important;}
 ul.pagination li.hidden-xs {display:inline !important;}
 @media (max-width: 768px) { 
     ul.pagination li.hidden-xs {display:none !important;}
+}
+
+/* Target IE10 & IE11 */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  body {
+    height: 100%;
+  }
 }
 
 #map {
