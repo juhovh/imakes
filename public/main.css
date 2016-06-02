@@ -67,6 +67,13 @@ ul.pagination li.hidden-xs {display:inline !important;}
     ul.pagination li.hidden-xs {display:none !important;}
 }
 
+/* Target IE10 & IE11 */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  body {
+    height: 100%;
+  }
+}
+
 #map {
   height: 500px;
   margin-bottom: 30px;
