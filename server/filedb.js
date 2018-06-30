@@ -201,7 +201,7 @@ function processImage(image, imgcb) {
   winston.info('Processing image %s', image.filename);
 
   getExifData(inputfile, function(err, exifdata) {
-    if (err) return videocb(err);
+    if (err) return imgcb(err);
 
     async.eachSeries(imageSizes, function(size, resizecb) {
       var outputdir = imagedir+size.size+'/';
