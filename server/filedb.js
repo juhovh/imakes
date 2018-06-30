@@ -87,29 +87,12 @@ var videoFormats = [
       '-b:v', '600k',
       '-r:v', '25/1',
       '-force_fps',
-      '-codec:a', 'libvo_aacenc',
+      '-codec:a', 'aac',
       '-b:a', '60k',
       '-r:a', '44100',
       '-ac', '1'
     ]
   }
-/* WebM is broken with avconv+Firefox, commenting out
-  ,{
-    ext: 'webm',
-    name: 'webm',
-    filters: scalepad.concat(['setsar=1:1','format=yuv420p']),
-    params: [
-      '-codec:v', 'libvpx',
-      '-b:v', '600k',
-      '-r:v', '25/1',
-      '-force_fps',
-      '-codec:a', 'libvorbis',
-      '-b:a', '60k',
-      '-r:a', '44100',
-      '-ac', '1'
-    ]
-  }
-*/
 ];
 function getVideoFilename(original, ext) {
   var originalext = path.extname(original);
