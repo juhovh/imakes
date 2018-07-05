@@ -28,7 +28,7 @@ exports.setup = function(config, app) {
   app.get('/atom.xml', function(req, res, next) {
     atom.generate(function(err, feed) {
       if (err) return next(err);
-      res.writeHead(200, { 'Content-Type': 'application/atom+xml; charset="utf-8"' });
+      res.writeHead(200, { 'Content-Type': 'application/atom+xml; charset=utf-8' });
       res.end(feed);
     });
   });
