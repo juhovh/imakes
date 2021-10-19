@@ -20,11 +20,11 @@ module.exports = {
   google: {
     clientID: '<CLIENTID>',
     clientSecret: '<SECRET>',
-    callbackURL: 'http://<HOSTNAME>/auth/google/callback'
+    callbackURL: 'https://<HOSTNAME>/auth/google/callback'
   },
   github: {
     clientID: '<CLIENTID>',
     clientSecret: '<SECRET>',
-    callbackURL: 'http://<HOSTNAME>/auth/github/callback'
+    callbackURL: 'https://<HOSTNAME>/auth/github/callback'
   }
 };
